@@ -1,4 +1,4 @@
-package hw1.`1`
+package hw1.`2`
 
 class Sieve(private val size: Int) {
     private val isPrime = Array(size) { true }
