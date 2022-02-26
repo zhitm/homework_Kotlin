@@ -1,6 +1,6 @@
-package hw1.`2`
+package homeworks.hw1.task2
 
-class Sieve(private val size: Int) {
+class SieveOfEratosthenes(private val size: Int) {
     private val isPrime = Array(size) { true }
     private val primes: MutableList<Int> = mutableListOf()
 
@@ -28,12 +28,4 @@ class Sieve(private val size: Int) {
     fun printPrimes() {
         primes.forEach { i -> println(i) }
     }
-}
-
-fun main() {
-    println("Input an integer number:")
-    val n = readLine()?.toInt()
-    val sieve = n?.let { Sieve(it) }
-    println("Primes before your number: ")
-    sieve?.printPrimes()
 }
