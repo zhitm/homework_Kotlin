@@ -1,6 +1,7 @@
 package homeworks.hw1.task3
 
 class PerformedCommandStorage(private var list: MutableList<Int>) {
+    fun getList(): MutableList<Int> = list
     var commandCounter = 0
     private val listOfCommands: MutableList<Command> = mutableListOf()
     fun addCommand(action: Action, args: IntArray) {
@@ -16,9 +17,5 @@ class PerformedCommandStorage(private var list: MutableList<Int>) {
             listOfCommands.removeAt(commandCounter - 1)
             commandCounter--
         }
-    }
-
-    fun printArray() {
-        list.forEach { print("$it ") }
     }
 }
