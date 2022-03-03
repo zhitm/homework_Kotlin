@@ -16,6 +16,6 @@ class PerformedCommandStorage(private var list: MutableList<Int>) {
             list = command.action.reverseAction(list, command.args)
             listOfCommands.removeAt(commandCounter - 1)
             commandCounter--
-        }
+        } else println("Nothing to undo")
     }
 }

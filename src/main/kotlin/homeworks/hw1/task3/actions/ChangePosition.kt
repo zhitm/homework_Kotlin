@@ -7,6 +7,8 @@ object ChangePosition : Action {
         val fromIndex = args[0]
         val toIndex = args[1]
         val value = list[fromIndex]
+        if (fromIndex !in 0 until list.size || toIndex !in 0 until list.size)
+            throw IllegalArgumentException("It's ArrayIndexOutOfBoundsException")
         list.removeAt(fromIndex)
         list.add(toIndex, value)
         return list
