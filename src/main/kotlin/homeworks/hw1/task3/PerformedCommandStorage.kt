@@ -1,21 +1,20 @@
 package homeworks.hw1.task3
 
-class PerformedCommandStorage(private var list: MutableList<Int>) {
-    fun getList(): MutableList<Int> = list
-    var commandCounter = 0
-    private val listOfCommands: MutableList<Command> = mutableListOf()
-    fun addCommand(action: Action, args: IntArray) {
-        listOfCommands.add(Command(action, args))
-        list = action.doAction(list, args)
+class PerformedCommandStorage(val list: MutableList<Int>) {
+    private var commandCounter = 0
+    private val listOfCommands: MutableList<Action> = mutableListOf()
+    fun addCommand(action: Action) {
+        listOfCommands.add(action)
+        action.doAction(list)
         commandCounter++
     }
 
-    fun undoCommand() {
+    fun undoLastCommand() {
         if (commandCounter != 0) {
-            val command = listOfCommands[commandCounter - 1]
-            list = command.action.reverseAction(list, command.args)
-            listOfCommands.removeAt(commandCounter - 1)
+            val command = listOfCommands.last()
+            command.reverseAction(list)
+            listOfCommands.removeLast()
             commandCounter--
-        } else println("Nothing to undo")
+        } else throw IllegalStateException("No commands to undo.")
     }
 }

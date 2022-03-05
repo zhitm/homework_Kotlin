@@ -10,41 +10,36 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class PerformedCommandStorageTest {
-    private val push = Push
-    private val pushBack = PushBack
-    private val changePosition = ChangePosition
-
     @ParameterizedTest
     @MethodSource("inputDataForPush")
     fun `test push and undo push`(storageInput: MutableList<Int>, expected: MutableList<Int>, args: IntArray) {
         val storage = PerformedCommandStorage(storageInput)
-        storage.addCommand(push, args)
-        assertEquals(expected, storage.getList())
-        storage.undoCommand()
-        assertEquals(storageInput, storage.getList())
+        storage.addCommand(Push(args))
+        assertEquals(expected, storage.list)
+        storage.undoLastCommand()
+        assertEquals(storageInput, storage.list)
     }
 
     @ParameterizedTest
     @MethodSource("inputDataForPushBack")
     fun `test pushBack and undo pushBack`(storageInput: MutableList<Int>, expected: MutableList<Int>, args: IntArray) {
         val storage = PerformedCommandStorage(storageInput)
-        storage.addCommand(pushBack, args)
-        assertEquals(expected, storage.getList())
-        storage.undoCommand()
-        assertEquals(storageInput, storage.getList())
+        storage.addCommand(PushBack(args))
+        assertEquals(expected, storage.list)
+        storage.undoLastCommand()
+        assertEquals(storageInput, storage.list)
     }
 
     @Test
-    fun `test commands list is empty after undo all commands`() {
+    fun `test undo all commands`() {
         val storage = PerformedCommandStorage(mutableListOf(1))
-        storage.addCommand(pushBack, intArrayOf(2))
-        storage.addCommand(push, intArrayOf(2))
-        storage.addCommand(changePosition, intArrayOf(0, 1))
-        storage.undoCommand()
-        storage.undoCommand()
-        storage.undoCommand()
-        assertEquals(mutableListOf(1), storage.getList())
-        assertEquals(0, storage.commandCounter)
+        storage.addCommand(PushBack(intArrayOf(2)))
+        storage.addCommand(Push(intArrayOf(2)))
+        storage.addCommand(ChangePosition(intArrayOf(0, 1)))
+        storage.undoLastCommand()
+        storage.undoLastCommand()
+        storage.undoLastCommand()
+        assertEquals(mutableListOf(1), storage.list)
     }
 
     @ParameterizedTest
@@ -55,10 +50,10 @@ class PerformedCommandStorageTest {
         args: IntArray
     ) {
         val storage = PerformedCommandStorage(storageInput)
-        storage.addCommand(changePosition, args)
-        assertEquals(expected, storage.getList())
-        storage.undoCommand()
-        assertEquals(storageInput, storage.getList())
+        storage.addCommand(ChangePosition(args))
+        assertEquals(expected, storage.list)
+        storage.undoLastCommand()
+        assertEquals(storageInput, storage.list)
     }
 
     companion object {
