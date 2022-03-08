@@ -18,7 +18,8 @@ class SieveOfEratosthenesTest {
     @ParameterizedTest(name = "test fail")
     @MethodSource("inputDataForFail")
     fun `test fail with not positive number as argument`(msg: String, value: Int) {
-        assertFailsWith<IllegalArgumentException>(message = msg, block = { sieve(value) })
+        val exception = assertFailsWith<IllegalArgumentException> { sieve(value) }
+        assertEquals(exception.message, msg)
     }
 
     companion object {
