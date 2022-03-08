@@ -3,7 +3,6 @@ package homeworks.hw1.task3
 import homeworks.hw1.task3.actions.ChangePosition
 import homeworks.hw1.task3.actions.Push
 import homeworks.hw1.task3.actions.PushBack
-import kotlin.system.exitProcess
 
 fun execute(command: String, storage: PerformedCommandStorage) {
     val splittedInput = command.split(" ")
@@ -21,7 +20,9 @@ fun execute(command: String, storage: PerformedCommandStorage) {
             "changePosition" -> if (args.size == 2) storage.addCommand(ChangePosition(args[0], args[1]))
             else -> println("No such command name")
         }
-    } else println("It's not a command")
+    } else {
+        println("It's not a command")
+    }
 }
 
 fun main() {
@@ -35,7 +36,7 @@ fun main() {
             list = str.split(" ").map { it.toInt() } as MutableList<Int>
         } catch (e: NumberFormatException) {
             println("It's not an array of numbers")
-            exitProcess(0)
+            return
         }
 
     val storage = PerformedCommandStorage(list)
