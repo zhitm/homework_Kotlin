@@ -4,19 +4,26 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class SieveOfEratosthenesTest {
 
     @ParameterizedTest(name = "test")
-    @MethodSource("inputData")
+    @MethodSource("inputDataForSieve")
     fun `test correct sieve`(expected: List<Int>, argument: Int) {
-        val sieve = SieveOfEratosthenes(argument)
-        assertEquals(expected, sieve.getPrimes())
+        val primes = sieve(argument)
+        assertEquals(expected, primes)
+    }
+
+    @ParameterizedTest(name = "test fail")
+    @MethodSource("inputDataForFail")
+    fun `test fail with not positive number as argument`(msg: String, value: Int) {
+        assertFailsWith<IllegalArgumentException>(message = msg, block = { sieve(value) })
     }
 
     companion object {
         @JvmStatic
-        fun inputData() = listOf(
+        fun inputDataForSieve() = listOf(
             Arguments.of(emptyList<Int>(), 1),
             Arguments.of(listOf(2), 2),
             Arguments.of(listOf(2, 3), 3),
@@ -24,5 +31,12 @@ class SieveOfEratosthenesTest {
             Arguments.of(listOf(2, 3, 5, 7, 11, 13), 16),
             Arguments.of(listOf(2, 3, 5, 7, 11, 13, 17, 19), 22),
         )
+
+        @JvmStatic
+        val msg: String = "Size of sieve should be more than 0"
+
+        @JvmStatic
+        fun inputDataForFail() =
+            listOf(Arguments.of(msg, 0), Arguments.of(msg, -4), Arguments.of(msg, -10))
     }
 }
