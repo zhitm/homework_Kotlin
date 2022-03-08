@@ -3,15 +3,24 @@ package homeworks.hw1.task3
 import homeworks.hw1.task3.actions.ChangePosition
 import homeworks.hw1.task3.actions.Push
 import homeworks.hw1.task3.actions.PushBack
+import kotlin.system.exitProcess
 
 fun execute(command: String, storage: PerformedCommandStorage) {
     val splittedInput = command.split(" ")
     if (splittedInput[0] == "add") {
-        val args = splittedInput.subList(2, splittedInput.size).map { it.toInt() }.toIntArray()
+        val args: IntArray
+        try {
+            args = splittedInput.subList(2, splittedInput.size).map { it.toInt() }.toIntArray()
+        } catch (e: NumberFormatException) {
+            println("It's not an array of numbers so it can't be arguments")
+            return
+        }
+        require(splittedInput.size >= 2) { "Missed name of command" }
         when (splittedInput[1]) {
-            "push" -> storage.addCommand(Push(args))
-            "pushBack" -> storage.addCommand(PushBack(args))
-            "changePosition" -> storage.addCommand(ChangePosition(args))
+            "push" -> if (args.size == 1) storage.addCommand(Push(args[0]))
+            "pushBack" -> if (args.size == 1) storage.addCommand(PushBack(args[0]))
+            "changePosition" -> if (args.size == 2) storage.addCommand(ChangePosition(args[0], args[1]))
+            else -> println("No such command name")
         }
     } else println("It's not a command")
 }
@@ -22,16 +31,25 @@ fun main() {
     println("Input an array:")
     var list: MutableList<Int> = mutableListOf()
     val str = readLine()
-    if (str != null) list = str.split(" ").map { it.toInt() } as MutableList<Int>
+    if (str != null)
+        try {
+            list = str.split(" ").map { it.toInt() } as MutableList<Int>
+        } catch (e: NumberFormatException) {
+            println("It's not an array of numbers")
+            exitProcess(0)
+        }
+
     val storage = PerformedCommandStorage(list)
     var run = true
     while (run) {
         println("Input a command:")
         val command = readLine()
-        if (command == "exit") run = false
-        else if (command == null) continue
-        else if (command == "undo") storage.undoLastCommand()
-        else execute(command, storage)
+        when (command) {
+            "exit" -> run = false
+            null -> continue
+            "undo" -> storage.undoLastCommand()
+            else -> execute(command, storage)
+        }
         println("Current state: ${storage.list.joinToString(" ")}")
     }
 }

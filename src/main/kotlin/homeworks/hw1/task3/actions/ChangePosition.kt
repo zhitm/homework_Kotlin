@@ -2,7 +2,7 @@ package homeworks.hw1.task3.actions
 
 import homeworks.hw1.task3.Action
 
-class ChangePosition(override val args: IntArray) : Action {
+class ChangePosition(private val fromIndex: Int, private val toIndex: Int) : Action {
     private fun changePositions(list: MutableList<Int>, fromIndex: Int, toIndex: Int): MutableList<Int> {
         val value = list[fromIndex]
         require(fromIndex in 0 until list.size && toIndex in 0 until list.size) {
@@ -14,10 +14,10 @@ class ChangePosition(override val args: IntArray) : Action {
     }
 
     override fun doAction(list: MutableList<Int>) {
-        changePositions(list, args[0], args[1])
+        changePositions(list, fromIndex, toIndex)
     }
 
     override fun reverseAction(list: MutableList<Int>) {
-        changePositions(list, args[1], args[0])
+        changePositions(list, toIndex, fromIndex)
     }
 }

@@ -12,9 +12,9 @@ import kotlin.test.assertEquals
 class PerformedCommandStorageTest {
     @ParameterizedTest
     @MethodSource("inputDataForPush")
-    fun `test push and undo push`(storageInput: MutableList<Int>, expected: MutableList<Int>, args: IntArray) {
+    fun `test push and undo push`(storageInput: MutableList<Int>, expected: MutableList<Int>, value: Int) {
         val storage = PerformedCommandStorage(storageInput)
-        storage.addCommand(Push(args))
+        storage.addCommand(Push(value))
         assertEquals(expected, storage.list)
         storage.undoLastCommand()
         assertEquals(storageInput, storage.list)
@@ -22,9 +22,9 @@ class PerformedCommandStorageTest {
 
     @ParameterizedTest
     @MethodSource("inputDataForPushBack")
-    fun `test pushBack and undo pushBack`(storageInput: MutableList<Int>, expected: MutableList<Int>, args: IntArray) {
+    fun `test pushBack and undo pushBack`(storageInput: MutableList<Int>, expected: MutableList<Int>, value: Int) {
         val storage = PerformedCommandStorage(storageInput)
-        storage.addCommand(PushBack(args))
+        storage.addCommand(PushBack(value))
         assertEquals(expected, storage.list)
         storage.undoLastCommand()
         assertEquals(storageInput, storage.list)
@@ -33,9 +33,9 @@ class PerformedCommandStorageTest {
     @Test
     fun `test undo all commands`() {
         val storage = PerformedCommandStorage(mutableListOf(1))
-        storage.addCommand(PushBack(intArrayOf(2)))
-        storage.addCommand(Push(intArrayOf(2)))
-        storage.addCommand(ChangePosition(intArrayOf(0, 1)))
+        storage.addCommand(PushBack(2))
+        storage.addCommand(Push(2))
+        storage.addCommand(ChangePosition(0, 1))
         storage.undoLastCommand()
         storage.undoLastCommand()
         storage.undoLastCommand()
@@ -47,10 +47,11 @@ class PerformedCommandStorageTest {
     fun `test changePosition and undo changePosition`(
         storageInput: MutableList<Int>,
         expected: MutableList<Int>,
-        args: IntArray
+        fromIndex: Int,
+        toIndex: Int
     ) {
         val storage = PerformedCommandStorage(storageInput)
-        storage.addCommand(ChangePosition(args))
+        storage.addCommand(ChangePosition(fromIndex, toIndex))
         assertEquals(expected, storage.list)
         storage.undoLastCommand()
         assertEquals(storageInput, storage.list)
@@ -59,27 +60,27 @@ class PerformedCommandStorageTest {
     companion object {
         @JvmStatic
         fun inputDataForPush() = listOf(
-            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(0, 1, 2, 3, 4), intArrayOf(0)),
-            Arguments.of(mutableListOf<Int>(), mutableListOf(1), intArrayOf(1)),
-            Arguments.of(mutableListOf(1), mutableListOf(100, 1), intArrayOf(100)),
-            Arguments.of(mutableListOf(1, 1, 1, 1, 1), mutableListOf(100, 1, 1, 1, 1, 1), intArrayOf(100)),
+            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(0, 1, 2, 3, 4), 0),
+            Arguments.of(mutableListOf<Int>(), mutableListOf(1), 1),
+            Arguments.of(mutableListOf(1), mutableListOf(100, 1), 100),
+            Arguments.of(mutableListOf(1, 1, 1, 1, 1), mutableListOf(100, 1, 1, 1, 1, 1), 100),
         )
 
         @JvmStatic
         fun inputDataForPushBack() = listOf(
-            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(1, 2, 3, 4, 0), intArrayOf(0)),
-            Arguments.of(mutableListOf<Int>(), mutableListOf(1), intArrayOf(1)),
-            Arguments.of(mutableListOf(1), mutableListOf(1, 100), intArrayOf(100)),
-            Arguments.of(mutableListOf(1, 1, 1, 1, 1), mutableListOf(1, 1, 1, 1, 1, 100), intArrayOf(100)),
+            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(1, 2, 3, 4, 0), 0),
+            Arguments.of(mutableListOf<Int>(), mutableListOf(1), 1),
+            Arguments.of(mutableListOf(1), mutableListOf(1, 100), 100),
+            Arguments.of(mutableListOf(1, 1, 1, 1, 1), mutableListOf(1, 1, 1, 1, 1, 100), 100),
         )
 
         @JvmStatic
         fun inputDataForChangePosition() = listOf(
-            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(2, 3, 4, 1), intArrayOf(0, 3)),
-            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(4, 1, 2, 3), intArrayOf(3, 0)),
-            Arguments.of(mutableListOf(1), mutableListOf(1), intArrayOf(0, 0)),
-            Arguments.of(mutableListOf(1, 1, 1, 1, 1), mutableListOf(1, 1, 1, 1, 1), intArrayOf(1, 3)),
-            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(1, 3, 4, 2), intArrayOf(1, 3))
+            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(2, 3, 4, 1), 0, 3),
+            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(4, 1, 2, 3), 3, 0),
+            Arguments.of(mutableListOf(1), mutableListOf(1), 0, 0),
+            Arguments.of(mutableListOf(1, 1, 1, 1, 1), mutableListOf(1, 1, 1, 1, 1), 1, 3),
+            Arguments.of(mutableListOf(1, 2, 3, 4), mutableListOf(1, 3, 4, 2), 1, 3)
         )
     }
 }
