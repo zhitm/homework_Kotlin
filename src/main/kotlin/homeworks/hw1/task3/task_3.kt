@@ -8,9 +8,8 @@ import kotlin.system.exitProcess
 fun execute(command: String, storage: PerformedCommandStorage) {
     val splittedInput = command.split(" ")
     if (splittedInput[0] == "add") {
-        val args: IntArray
-        try {
-            args = splittedInput.subList(2, splittedInput.size).map { it.toInt() }.toIntArray()
+        val args: IntArray = try {
+            splittedInput.subList(2, splittedInput.size).map { it.toInt() }.toIntArray()
         } catch (e: NumberFormatException) {
             println("It's not an array of numbers so it can't be arguments")
             return
