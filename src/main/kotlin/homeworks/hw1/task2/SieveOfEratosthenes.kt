@@ -1,16 +1,17 @@
 package homeworks.hw1.task2
 
-fun sieve(sieveSize: Int): MutableList<Int> {
+fun sieve(sieveSize: Int): List<Int> {
     require(sieveSize > 0) { "Size of sieve should be more than 0" }
 
-    var isPrime = BooleanArray(sieveSize) { true }
-    val primes: MutableList<Int> = mutableListOf()
-
-    for (i in 1 until sieveSize) {
-        if (isPrime[i]) {
-            primes.add(i + 1)
-            isPrime = isPrime.mapIndexed { index, value -> ((index + 1) % (i + 1) != 0 && value) }.toBooleanArray()
+    val isPrime = BooleanArray(sieveSize + 1) { true }
+    isPrime.indices.forEach {
+        if (it <= 1) {
+            isPrime[it] = false
+            return@forEach
+        }
+        for (compositeNumberIndex in it * it..sieveSize step it) {
+            isPrime[compositeNumberIndex] = false
         }
     }
-    return primes
+    return IntArray(sieveSize) { it + 1 }.filter { isPrime[it] }
 }
