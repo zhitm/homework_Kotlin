@@ -15,9 +15,9 @@ class PerformedCommandStorageTest {
     fun `test push and undo push`(storageInput: MutableList<Int>, expected: MutableList<Int>, value: Int) {
         val storage = PerformedCommandStorage(storageInput)
         storage.addCommand(Push(value))
-        assertEquals(expected, storage.list)
+        assertEquals(expected, storage.currentState)
         storage.undoLastCommand()
-        assertEquals(storageInput, storage.list)
+        assertEquals(storageInput, storage.currentState)
     }
 
     @ParameterizedTest
@@ -25,9 +25,9 @@ class PerformedCommandStorageTest {
     fun `test pushBack and undo pushBack`(storageInput: MutableList<Int>, expected: MutableList<Int>, value: Int) {
         val storage = PerformedCommandStorage(storageInput)
         storage.addCommand(PushBack(value))
-        assertEquals(expected, storage.list)
+        assertEquals(expected, storage.currentState)
         storage.undoLastCommand()
-        assertEquals(storageInput, storage.list)
+        assertEquals(storageInput, storage.currentState)
     }
 
     @Test
@@ -39,7 +39,7 @@ class PerformedCommandStorageTest {
         storage.undoLastCommand()
         storage.undoLastCommand()
         storage.undoLastCommand()
-        assertEquals(mutableListOf(1), storage.list)
+        assertEquals(mutableListOf(1), storage.currentState)
     }
 
     @ParameterizedTest
@@ -52,9 +52,9 @@ class PerformedCommandStorageTest {
     ) {
         val storage = PerformedCommandStorage(storageInput)
         storage.addCommand(ChangePosition(fromIndex, toIndex))
-        assertEquals(expected, storage.list)
+        assertEquals(expected, storage.currentState)
         storage.undoLastCommand()
-        assertEquals(storageInput, storage.list)
+        assertEquals(storageInput, storage.currentState)
     }
 
     companion object {

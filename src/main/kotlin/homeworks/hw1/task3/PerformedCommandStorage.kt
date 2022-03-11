@@ -1,6 +1,8 @@
 package homeworks.hw1.task3
 
-class PerformedCommandStorage(val list: MutableList<Int>) {
+class PerformedCommandStorage(private val list: MutableList<Int>) {
+    val currentState: MutableList<Int>
+        get() = list
     private val listOfCommands: MutableList<Action> = mutableListOf()
     fun addCommand(action: Action) {
         listOfCommands.add(action)
@@ -9,8 +11,7 @@ class PerformedCommandStorage(val list: MutableList<Int>) {
 
     fun undoLastCommand() {
         require(listOfCommands.isNotEmpty()) { "No commands to undo" }
-        val command = listOfCommands.last()
+        val command = listOfCommands.removeLast()
         command.reverseAction(list)
-        listOfCommands.removeLast()
     }
 }

@@ -5,8 +5,12 @@ import homeworks.hw1.task3.actions.Push
 import homeworks.hw1.task3.actions.PushBack
 
 fun execute(command: String, storage: PerformedCommandStorage) {
+    if (command == "undo") {
+        storage.undoLastCommand()
+        return
+    }
     val splittedInput = command.split(" ")
-    if (splittedInput[0] == "add") {
+    if (splittedInput.isNotEmpty() && splittedInput[0] == "add") {
         val args: IntArray = try {
             splittedInput.subList(2, splittedInput.size).map { it.toInt() }.toIntArray()
         } catch (e: NumberFormatException) {
@@ -47,9 +51,8 @@ fun main() {
         when (command) {
             "exit" -> run = false
             null -> continue
-            "undo" -> storage.undoLastCommand()
             else -> execute(command, storage)
         }
-        println("Current state: ${storage.list.joinToString(" ")}")
+        println("Current state: ${storage.currentState.joinToString(" ")}")
     }
 }
