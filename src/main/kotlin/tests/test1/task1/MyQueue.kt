@@ -17,11 +17,13 @@ class MyQueue<T, K>(private val comparator: Comparator<QueueElement<T, K>>) {
 
     fun remove() {
         require(size > 0) { "Queue should not be empty before remove" }
+        size--
         set.remove(set.last())
     }
 
     fun roll(): T {
         require(size > 0) { "Queue should not be empty before roll" }
+        size--
         val element = peek()
         remove()
         return element
