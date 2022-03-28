@@ -23,7 +23,6 @@ class MyQueue<T, K : Comparable<K>>(private val comparator: Comparator<QueueElem
 
     fun roll(): T {
         require(size > 0) { "Queue should not be empty before roll" }
-        size--
         val element = peek()
         remove()
         return element
