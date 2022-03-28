@@ -2,7 +2,7 @@ package tests.test1.task1
 
 import java.util.Comparator
 
-class MyQueue<T, K>(private val comparator: Comparator<QueueElement<T, K>>) {
+class MyQueue<T, K : Comparable<K>>(private val comparator: Comparator<QueueElement<T, K>>) {
     val set = sortedSetOf(comparator)
     var size = 0
     fun enqueue(element: T, priority: K) {
