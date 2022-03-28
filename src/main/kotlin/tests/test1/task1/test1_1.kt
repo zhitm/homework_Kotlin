@@ -5,7 +5,6 @@ fun main() {
     val queue = MyQueue<String, String>(cmp)
     println("Value - string, priority - string")
     while (true) {
-        val enqueueArgsCount = 3
         val command = readLine() ?: return
         val splittedInput = command.split(" ")
         if (splittedInput.size == 1) {
@@ -16,7 +15,7 @@ fun main() {
                 "exit" -> return
                 else -> println("It's not a command")
             }
-        } else if (splittedInput.size == enqueueArgsCount && splittedInput[0] == "enqueue") {
+        } else if (splittedInput.size == @Suppress("MagicNumber") 3 && splittedInput[0] == "enqueue") {
             queue.enqueue(splittedInput[1], splittedInput[2])
         } else println("It's not a command")
     }
