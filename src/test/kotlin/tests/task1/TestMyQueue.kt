@@ -10,7 +10,7 @@ class TestMyQueue {
 
     @Test
     fun testQueue() {
-        val queue = MyQueue<Int>(cmp)
+        val queue = MyQueue<String, Int>(cmp)
         queue.enqueue("a", 100)
         queue.enqueue("b", 2)
         queue.enqueue("c", 4)
