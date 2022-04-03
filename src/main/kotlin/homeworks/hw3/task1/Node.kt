@@ -3,17 +3,28 @@ package homeworks.hw3.task1
 import java.lang.Integer.max
 
 
-class Node<K, V>(val key: K, val value: V, val parent: Node<K,V>?) {
+class Node<K, V>(val key: K, val value: V) {
     var leftNode: Node<K, V>? = null
-      
     var rightNode: Node<K, V>? = null
-    private var height = 0
-    fun updateHeight() {
-        height = max(leftNode?.height?.plus(1) ?: 0, rightNode?.height?.plus(1) ?: 0)
+    var height = 0
+    fun replaceChild(oldChild: Node<K, V>, newChild: Node<K, V>?) {
+        if (leftNode == oldChild) {
+            leftNode = newChild
+        } else {
+            rightNode = newChild
+        }
     }
 
-    fun getHeightDifference() : Int = (leftNode?.height ?: 0) - (leftNode?.height ?: 0)
-    fun isNotBalanced(): Boolean = kotlin.math.abs((leftNode?.height ?: 0) - (leftNode?.height ?: 0)) > 1
+
+    fun updateHeight() {
+        val leftHeight = if (leftNode == null) 0 else leftNode!!.height + 1
+        val rightHeight = if (rightNode == null) 0 else rightNode!!.height + 1
+        height = max(leftHeight, rightHeight)
+
+    }
+
+    fun getHeightDifference(): Int = (rightNode?.height?.plus(1) ?: 0) - (leftNode?.height?.plus(1) ?: 0)
+    fun isNotBalanced(): Boolean = kotlin.math.abs(getHeightDifference()) > 1
 
 
 }

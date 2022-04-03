@@ -1,27 +1,40 @@
 package homeworks.hw3.task1
 
-class AVLTreeMap<K, V>(override val size: Int, comparator: (V, V) -> Int) : Map<K, V> {
-    val tree: Tree<K,V> = Tree(comparator)
+class AVLTreeMap<K: Comparable<K>, V> : Map<K,V> {
+    val tree: Tree<K, V> = Tree()
+
+    override var size = 0
+    private var _entries: Set<Map.Entry<K, V>> = emptySet()
+    private var _keys : Set<K> = emptySet()
+    private var _values: Collection<V> = emptyList()
     override val entries: Set<Map.Entry<K, V>>
-        get() = TODO("Not yet implemented")
+        get() = _entries
     override val keys: Set<K>
-        get() = TODO("Not yet implemented")
+        get() = _keys
     override val values: Collection<V>
-        get() = TODO("Not yet implemented")
+        get() = _values
 
     override fun get(key: K): V? {
-        TODO("Not yet implemented")
+        return tree.get(key)
     }
 
     override fun containsKey(key: K): Boolean {
-        TODO("Not yet implemented")
+        return keys.contains(key)
     }
 
     override fun containsValue(value: V): Boolean {
-        TODO("Not yet implemented")
+        return values.contains(value)
     }
 
     override fun isEmpty(): Boolean {
-        TODO("Not yet implemented")
+        return size == 0
+    }
+
+    fun add(key: K, value: V) {
+        tree.addNode(key, value)
+        _keys.plus(key)
+        _values.plus(value)
+        _entries.plus(key to value)
+        size++
     }
 }
