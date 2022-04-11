@@ -1,11 +1,17 @@
 package homeworks.hw3.task1
 
-class AVLTreeMap<K: Comparable<K>, V> : Map<K,V> {
-    val tree: Tree<K, V> = Tree()
+import java.io.File
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.Reader
+import java.util.concurrent.TimeUnit
+
+class AVLTreeMap<K : Comparable<K>, V> : Map<K, V> {
+    private val tree: Tree<K, V> = Tree()
 
     override var size = 0
     private var _entries: Set<Map.Entry<K, V>> = emptySet()
-    private var _keys : Set<K> = emptySet()
+    private var _keys: Set<K> = emptySet()
     private var _values: Collection<V> = emptyList()
     override val entries: Set<Map.Entry<K, V>>
         get() = _entries
@@ -15,7 +21,7 @@ class AVLTreeMap<K: Comparable<K>, V> : Map<K,V> {
         get() = _values
 
     override fun get(key: K): V? {
-        return tree.get(key)
+        return tree.get(key)?.value
     }
 
     override fun containsKey(key: K): Boolean {
@@ -37,4 +43,21 @@ class AVLTreeMap<K: Comparable<K>, V> : Map<K,V> {
         _entries.plus(key to value)
         size++
     }
+
+    fun delete(key: K) {
+        val value = get(key)
+        tree.deleteNode(key)
+        size--
+        _keys.minus(key)
+        _values.minus(value)
+        _entries.minus(key to value)
+    }
+
+    fun isMapCorrect(): Boolean = tree.isTreeCorrect(tree.root) && _keys.all { tree.hasKey(it) }
+
+
+    fun drawKeyTree(path: String) {
+        tree.createDotFile(path)
+    }
 }
+

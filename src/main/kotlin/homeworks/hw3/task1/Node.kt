@@ -2,8 +2,7 @@ package homeworks.hw3.task1
 
 import java.lang.Integer.max
 
-
-class Node<K, V>(val key: K, val value: V) {
+class Node<K, V>(var key: K, var value: V) {
     var leftNode: Node<K, V>? = null
     var rightNode: Node<K, V>? = null
     var height = 0
@@ -25,6 +24,5 @@ class Node<K, V>(val key: K, val value: V) {
 
     fun getHeightDifference(): Int = (rightNode?.height?.plus(1) ?: 0) - (leftNode?.height?.plus(1) ?: 0)
     fun isNotBalanced(): Boolean = kotlin.math.abs(getHeightDifference()) > 1
-
-
+    fun isLeaf(): Boolean = (leftNode == null && rightNode == null)
 }
