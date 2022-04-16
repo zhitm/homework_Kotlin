@@ -1,14 +1,11 @@
 package homeworks.hw3.task1
 
-import homeworks.hw1.task3.execute
-
 fun addShuffledKeysFromRange(map: AVLTreeMap<Int, Int>, range: IntRange) {
     range.shuffled().forEach {
         map.add(it, 1)
     }
 }
-
-
+@Suppress("MagicNumber")
 fun execute(command: String, map: AVLTreeMap<Int, Int>) {
     val splittedInput = command.split(" ")
     if (splittedInput.size <= 1 || (splittedInput[0] != "add" && splittedInput[0] != "del")) {
@@ -42,11 +39,10 @@ fun main() {
         when (val command = readLine()) {
             "exit" -> {
                 run = false
-                map.drawKeyTree("src/main/CLI_tree.dot")
             }
             null -> continue
             else -> execute(command, map)
         }
     }
-    map.drawKeyTree("src/main/tree.dot")
+    map.createDotFile("src/main/kotlin/homeworks/hw3/task1/tree.dot")
 }

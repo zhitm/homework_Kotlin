@@ -14,12 +14,10 @@ class Node<K, V>(var key: K, var value: V) {
         }
     }
 
-
     fun updateHeight() {
         val leftHeight = if (leftNode == null) 0 else leftNode!!.height + 1
         val rightHeight = if (rightNode == null) 0 else rightNode!!.height + 1
         height = max(leftHeight, rightHeight)
-
     }
 
     fun getHeightDifference(): Int = (rightNode?.height?.plus(1) ?: 0) - (leftNode?.height?.plus(1) ?: 0)

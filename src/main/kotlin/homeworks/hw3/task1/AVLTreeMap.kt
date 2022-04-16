@@ -1,24 +1,12 @@
 package homeworks.hw3.task1
 
-import java.io.File
-import java.io.IOException
-import java.io.InputStreamReader
-import java.io.Reader
-import java.util.concurrent.TimeUnit
-
 class AVLTreeMap<K : Comparable<K>, V> : Map<K, V> {
     private val tree: Tree<K, V> = Tree()
-
+    private val fileCreator: GraphvizFileCreator<K, V> = GraphvizFileCreator()
     override var size = 0
-    private var _entries: Set<Map.Entry<K, V>> = emptySet()
-    private var _keys: Set<K> = emptySet()
-    private var _values: Collection<V> = emptyList()
-    override val entries: Set<Map.Entry<K, V>>
-        get() = _entries
-    override val keys: Set<K>
-        get() = _keys
-    override val values: Collection<V>
-        get() = _values
+    override val entries: MutableSet<Map.Entry<K, V>> = mutableSetOf()
+    override val keys: MutableSet<K> = mutableSetOf()
+    override val values: MutableList<V> = mutableListOf()
 
     override fun get(key: K): V? {
         return tree.get(key)?.value
@@ -38,9 +26,9 @@ class AVLTreeMap<K : Comparable<K>, V> : Map<K, V> {
 
     fun add(key: K, value: V) {
         tree.addNode(key, value)
-        _keys.plus(key)
-        _values.plus(value)
-        _entries.plus(key to value)
+        keys.add(key)
+        values.add(value)
+//        entries.add(key to value)
         size++
     }
 
@@ -48,16 +36,15 @@ class AVLTreeMap<K : Comparable<K>, V> : Map<K, V> {
         val value = get(key)
         tree.deleteNode(key)
         size--
-        _keys.minus(key)
-        _values.minus(value)
-        _entries.minus(key to value)
+        keys.remove(key)
+        values.remove(value)
+//        entries.remove(key to value)
     }
 
-    fun isMapCorrect(): Boolean = tree.isTreeCorrect(tree.root) && _keys.all { tree.hasKey(it) }
+    fun isMapCorrect(): Boolean =
+        tree.isTreeCorrect(tree.root) && keys.all { tree.hasKey(it) } && keys.size == size && values.size == size
 
-
-    fun drawKeyTree(path: String) {
-        tree.createDotFile(path)
+    fun createDotFile(path: String) {
+        fileCreator.createDotFile(path, tree.root)
     }
 }
-

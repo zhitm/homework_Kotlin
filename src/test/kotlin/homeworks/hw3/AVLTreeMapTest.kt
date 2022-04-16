@@ -29,8 +29,9 @@ class AVLTreeMapTest {
         map.delete(1)
         assertEquals(true, map.isMapCorrect())
     }
+
     @Test
-    fun `test delete all`(){
+    fun `test delete all`() {
         val map: AVLTreeMap<Int, Int> = AVLTreeMap()
         map.add(1, 1)
         map.add(2, 2)
@@ -46,8 +47,29 @@ class AVLTreeMapTest {
         map.delete(4)
         map.delete(-2)
         map.delete(10)
-        assertEquals(true, map.isEmpty())
+        assertEquals(true, map.isEmpty() && map.isMapCorrect())
     }
 
+    @Test
+    fun `test size`() {
+        val map: AVLTreeMap<Int, Int> = AVLTreeMap()
+        map.add(1, 1)
+        map.add(2, 4)
+        map.add(3, 4)
+        map.delete(3)
+        assertEquals(2, map.size)
+    }
 
+    @Test
+    fun `random test`() {
+        val map: AVLTreeMap<Int, Int> = AVLTreeMap()
+        map.add(1, 1)
+        map.add(2, 4)
+        map.add(3, 4)
+        map.delete(3)
+        map.delete(1)
+        map.add(10, 10)
+        map.add(12, 2)
+        assertEquals(true, map.isMapCorrect())
+    }
 }

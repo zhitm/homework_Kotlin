@@ -1,8 +1,5 @@
 package homeworks.hw3.task1
 
-import java.io.File
-import java.io.PrintWriter
-
 class Tree<K : Comparable<K>, V> {
     var root: Node<K, V>? = null
 
@@ -18,16 +15,16 @@ class Tree<K : Comparable<K>, V> {
 
     fun hasKey(key: K): Boolean = get(key) != null
 
+    private fun isBSTRuleDone(node: Node<K, V>?): Boolean {
+        if (node == null) return true
+        val isLeftKeyGreater = (node.leftNode ?: node).key > node.key
+        val isRightKeyGreater = (node.rightNode ?: node).key < node.key
+        return isLeftKeyGreater || isRightKeyGreater || !isTreeCorrect(node.leftNode) || !isTreeCorrect(node.rightNode)
+    }
+
     fun isTreeCorrect(root: Node<K, V>?): Boolean {
-        if (root == null) return true
-        if (root.isNotBalanced()) return false
-        if (root.leftNode != null) {
-            if (root.leftNode!!.key > root.key) return false
-            if (!isTreeCorrect(root.leftNode!!)) return false
-        }
-        if (root.rightNode != null) {
-            if (root.rightNode!!.key < root.key) return false
-            if (!isTreeCorrect(root.rightNode!!)) return false
+        if (root != null) {
+            if (root.isNotBalanced() || !isBSTRuleDone(root)) return false
         }
         return true
     }
@@ -59,12 +56,10 @@ class Tree<K : Comparable<K>, V> {
     }
 
     private fun getParent(node: Node<K, V>): Node<K, V>? {
-        if (root == node) return null
         val key = node.key
         var current = root
         while (current != null) {
-            current = if (current.leftNode == node) return current
-            else if (current.rightNode == node) return current
+            current = if (current.leftNode == node || current.rightNode == node) return current
             else if (current.key > key) current.leftNode
             else current.rightNode
         }
@@ -85,7 +80,7 @@ class Tree<K : Comparable<K>, V> {
         if (nodeToDelete.isLeaf()) {
 
             parent?.replaceChild(nodeToDelete, null)
-            changeRootIfNecessary(nodeToDelete, null)
+            Balancer.changeRootIfNecessary(this, nodeToDelete, null)
         } else if (nodeToDelete.leftNode != null && nodeToDelete.rightNode != null) {
 
             val nodeToReplace = getMinFromSubtree(nodeToDelete.rightNode!!)
@@ -95,11 +90,11 @@ class Tree<K : Comparable<K>, V> {
         } else if (nodeToDelete.leftNode != null) {
 
             parent?.replaceChild(nodeToDelete, nodeToDelete.leftNode)
-            changeRootIfNecessary(nodeToDelete, nodeToDelete.leftNode)
+            Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.leftNode)
         } else {
 
             parent?.replaceChild(nodeToDelete, nodeToDelete.rightNode)
-            changeRootIfNecessary(nodeToDelete, nodeToDelete.rightNode)
+            Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.rightNode)
         }
         root?.let { updateHeightAndBalance(it, null) }
     }
@@ -108,84 +103,71 @@ class Tree<K : Comparable<K>, V> {
         node.leftNode?.let { updateHeightAndBalance(it, node) }
         node.rightNode?.let { updateHeightAndBalance(it, node) }
         node.updateHeight()
-        if (node.isNotBalanced()) balanceNode(node, parent)
+        if (node.isNotBalanced()) Balancer.balanceNode(this, node, parent)
     }
 
-    private fun changeRootIfNecessary(parent: Node<K, V>, child: Node<K, V>?) {
-        if (parent == root) root = child
-    }
+    private object Balancer {
 
-    private fun leftRotate(node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-        changeRootIfNecessary(node, node.rightNode)
-        val newSubtreeRoot = node.rightNode!!
-        parent?.replaceChild(node, node.rightNode)
-        node.rightNode = newSubtreeRoot.leftNode
-        newSubtreeRoot.leftNode = node
-        node.updateHeight()
-        newSubtreeRoot.updateHeight()
-        parent?.updateHeight()
-        return newSubtreeRoot
-    }
-
-    private fun rightRotate(node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-        changeRootIfNecessary(node, node.leftNode)
-        val newSubtreeRoot = node.leftNode!!
-        parent?.replaceChild(node, node.leftNode)
-        node.leftNode = newSubtreeRoot.rightNode
-        newSubtreeRoot.rightNode = node
-        node.updateHeight()
-        newSubtreeRoot.updateHeight()
-        parent?.updateHeight()
-        return newSubtreeRoot
-    }
-
-    private fun leftRightRotate(node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-        leftRotate(node.leftNode!!, node)
-        val newSubtreeRoot = node.leftNode
-        rightRotate(node, parent)
-        return newSubtreeRoot!!
-    }
-
-    private fun rightLeftRotate(node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-        rightRotate(node.rightNode!!, node)
-        val newSubtreeRoot = node.rightNode
-        leftRotate(node, parent)
-        return newSubtreeRoot!!
-    }
-
-    private fun balanceNode(node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-        return when (node.getHeightDifference()) {
-            2 -> if (node.rightNode?.getHeightDifference() == -1) rightLeftRotate(node, parent) else leftRotate(
-                node,
-                parent
-            )
-            -2 -> if (node.leftNode?.getHeightDifference() == 1) leftRightRotate(node, parent) else rightRotate(
-                node,
-                parent
-            )
-            else -> node
+        fun <K : Comparable<K>, V> changeRootIfNecessary(tree: Tree<K, V>, parent: Node<K, V>, child: Node<K, V>?) {
+            if (parent == tree.root) tree.root = child
         }
-    }
 
-    private fun writeEdges(root: Node<K, V>, writer: PrintWriter) {
-        if (root.leftNode != null) {
-            writer.println("${root.key} -> ${root.leftNode!!.key}")
-            writeEdges(root.leftNode!!, writer)
+        fun <K : Comparable<K>, V> leftRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
+            changeRootIfNecessary(tree, node, node.rightNode)
+            val newSubtreeRoot = node.rightNode!!
+            parent?.replaceChild(node, node.rightNode)
+            node.rightNode = newSubtreeRoot.leftNode
+            newSubtreeRoot.leftNode = node
+            node.updateHeight()
+            newSubtreeRoot.updateHeight()
+            parent?.updateHeight()
+            return newSubtreeRoot
         }
-        if (root.rightNode != null) {
-            writer.println("${root.key} -> ${root.rightNode!!.key}")
-            writeEdges(root.rightNode!!, writer)
-        }
-    }
 
-    fun createDotFile(path: String) {
-        File(path).printWriter().use { out ->
-            out.println("digraph G {")
-            if (root?.isLeaf() == true) out.println(root?.key ?: "empty graph")
-            root?.let { writeEdges(it, out) }
-            out.println("}")
+        fun <K : Comparable<K>, V> rightRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
+            changeRootIfNecessary(tree, node, node.leftNode)
+            val newSubtreeRoot = node.leftNode!!
+            parent?.replaceChild(node, node.leftNode)
+            node.leftNode = newSubtreeRoot.rightNode
+            newSubtreeRoot.rightNode = node
+            node.updateHeight()
+            newSubtreeRoot.updateHeight()
+            parent?.updateHeight()
+            return newSubtreeRoot
+        }
+
+        fun <K : Comparable<K>, V> leftRightRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
+            leftRotate(tree, node.leftNode!!, node)
+            rightRotate(tree, node, parent)
+        }
+
+        fun <K : Comparable<K>, V> rightLeftRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
+            rightRotate(tree, node.rightNode!!, node)
+            leftRotate(tree, node, parent)
+        }
+
+        fun <K : Comparable<K>, V> balanceNode(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
+            when (node.getHeightDifference()) {
+                2 -> if (node.rightNode?.getHeightDifference() == -1) rightLeftRotate(
+                    tree,
+                    node,
+                    parent
+                ) else leftRotate(
+                    tree,
+                    node,
+                    parent
+                )
+                @Suppress("MagicNumber")
+                -2 -> if (node.leftNode?.getHeightDifference() == 1) leftRightRotate(
+                    tree,
+                    node,
+                    parent
+                ) else rightRotate(
+                    tree,
+                    node,
+                    parent
+                )
+            }
         }
     }
 }
-
-
