@@ -1,12 +1,20 @@
 package homeworks.hw3.task1
 
-class AVLTreeMap<K : Comparable<K>, V> : Map<K, V> {
+class AVLTreeMap<K : Comparable<K>, V> : MutableMap<K, V> {
     private val tree: Tree<K, V> = Tree()
     private val fileCreator: GraphvizFileCreator<K, V> = GraphvizFileCreator()
     override var size = 0
-    override val entries: MutableSet<Map.Entry<K, V>> = mutableSetOf()
-    override val keys: MutableSet<K> = mutableSetOf()
-    override val values: MutableList<V> = mutableListOf()
+        private set
+    override val entries = mutableSetOf<MutableMap.MutableEntry<K, V>>()
+    override val keys = mutableSetOf<K>()
+    override val values = mutableListOf<V>()
+    override fun clear() {
+        size = 0
+        keys.clear()
+        values.clear()
+        entries.clear()
+        tree.root = null
+    }
 
     override fun get(key: K): V? {
         return tree.get(key)?.value
@@ -24,25 +32,37 @@ class AVLTreeMap<K : Comparable<K>, V> : Map<K, V> {
         return size == 0
     }
 
-    fun add(key: K, value: V) {
-        tree.addNode(key, value)
-        keys.add(key)
-        values.add(value)
-//        entries.add(key to value)
-        size++
+    override fun remove(key: K): V? {
+        val value = get(key)
+        if (value != null) {
+            tree.deleteNode(key)
+            size--
+            keys.remove(key)
+            values.remove(value)
+            entries.remove(Entry(key, value))
+        }
+        return value
     }
 
-    fun delete(key: K) {
-        val value = get(key)
-        tree.deleteNode(key)
-        size--
-        keys.remove(key)
-        values.remove(value)
-//        entries.remove(key to value)
+    override fun putAll(from: Map<out K, V>) {
+        from.entries.forEach { put(it.key, it.value) }
+    }
+
+    override fun put(key: K, value: V): V? {
+        val previousValue = get(key)
+        tree.addNode(key, value)
+        if (previousValue == null) {
+            keys.add(key)
+            size++
+        }
+        values.add(value)
+        entries.add(Entry(key, value))
+        return previousValue
     }
 
     fun isMapCorrect(): Boolean =
-        tree.isTreeCorrect(tree.root) && keys.all { tree.hasKey(it) } && keys.size == size && values.size == size
+        tree.isTreeCorrect(tree.root)
+//                && keys.all { tree.hasKey(it) } && keys.size == size && values.size == size
 
     fun createDotFile(path: String) {
         fileCreator.createDotFile(path, tree.root)

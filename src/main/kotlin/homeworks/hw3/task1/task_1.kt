@@ -2,9 +2,10 @@ package homeworks.hw3.task1
 
 fun addShuffledKeysFromRange(map: AVLTreeMap<Int, Int>, range: IntRange) {
     range.shuffled().forEach {
-        map.add(it, 1)
+        map[it] = 1
     }
 }
+
 @Suppress("MagicNumber")
 fun execute(command: String, map: AVLTreeMap<Int, Int>) {
     val splittedInput = command.split(" ")
@@ -15,12 +16,14 @@ fun execute(command: String, map: AVLTreeMap<Int, Int>) {
     when (splittedInput.size) {
         2 -> {
             val arg = splittedInput[1].toIntOrNull()
-            if (arg != null) map.delete(arg)
+            if (arg != null) map.remove(arg)
         }
         3 -> {
             val firstArg = splittedInput[1].toIntOrNull()
             val secondArg = splittedInput[2].toIntOrNull()
-            if (firstArg != null && secondArg != null) map.add(firstArg, secondArg)
+            if (firstArg != null && secondArg != null) {
+                map[firstArg] = secondArg
+            }
         }
         4 -> {
             if (splittedInput[1] == "range") {

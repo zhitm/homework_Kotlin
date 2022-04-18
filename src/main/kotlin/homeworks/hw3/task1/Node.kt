@@ -6,6 +6,9 @@ class Node<K, V>(var key: K, var value: V) {
     var leftNode: Node<K, V>? = null
     var rightNode: Node<K, V>? = null
     var height = 0
+    val balanceFactor
+        get() = (rightNode?.height?.plus(1) ?: 0) - (leftNode?.height?.plus(1) ?: 0)
+
     fun replaceChild(oldChild: Node<K, V>, newChild: Node<K, V>?) {
         if (leftNode == oldChild) {
             leftNode = newChild
@@ -20,7 +23,6 @@ class Node<K, V>(var key: K, var value: V) {
         height = max(leftHeight, rightHeight)
     }
 
-    fun getHeightDifference(): Int = (rightNode?.height?.plus(1) ?: 0) - (leftNode?.height?.plus(1) ?: 0)
-    fun isNotBalanced(): Boolean = kotlin.math.abs(getHeightDifference()) > 1
+    fun isNotBalanced(): Boolean = kotlin.math.abs(balanceFactor) > 1
     fun isLeaf(): Boolean = (leftNode == null && rightNode == null)
 }

@@ -17,9 +17,9 @@ class Tree<K : Comparable<K>, V> {
 
     private fun isBSTRuleDone(node: Node<K, V>?): Boolean {
         if (node == null) return true
-        val isLeftKeyGreater = (node.leftNode ?: node).key > node.key
-        val isRightKeyGreater = (node.rightNode ?: node).key < node.key
-        return isLeftKeyGreater || isRightKeyGreater || !isTreeCorrect(node.leftNode) || !isTreeCorrect(node.rightNode)
+        val isLeftKeyGreater = if (node.leftNode == null) false else node.leftNode!!.key.compareTo(node.key) == 1
+        val isRightKeyLess = if (node.rightNode == null) false else node.rightNode!!.key.compareTo(node.key) == -1
+        return (!isLeftKeyGreater || !isRightKeyLess || isTreeCorrect(node.leftNode) && isTreeCorrect(node.rightNode))
     }
 
     fun isTreeCorrect(root: Node<K, V>?): Boolean {
@@ -35,13 +35,16 @@ class Tree<K : Comparable<K>, V> {
             return
         }
         var last: Node<K, V> = root as Node<K, V>
+        val nodeWithThisKey = get(key)
+        if (nodeWithThisKey != null) {
+            nodeWithThisKey.value = value
+            return
+        }
         var currentNode = root
         while (currentNode != null) {
             last = currentNode
             currentNode = if (key > currentNode.key) {
                 currentNode.rightNode
-            } else if (key == currentNode.key) {
-                throw IllegalStateException("This map has already this key")
             } else {
                 currentNode.leftNode
             }
@@ -107,7 +110,10 @@ class Tree<K : Comparable<K>, V> {
     }
 
     private object Balancer {
-
+        const val LEFT_SUBTREE_IS_MUCH_BIGGER = -2
+        const val LEFT_SUBTREE_IS_BIGGER = -1
+        const val RIGHT_SUBTREE_IS_MUCH_BIGGER = 2
+        const val RIGHT_SUBTREE_IS_BIGGER = 1
         fun <K : Comparable<K>, V> changeRootIfNecessary(tree: Tree<K, V>, parent: Node<K, V>, child: Node<K, V>?) {
             if (parent == tree.root) tree.root = child
         }
@@ -147,22 +153,23 @@ class Tree<K : Comparable<K>, V> {
         }
 
         fun <K : Comparable<K>, V> balanceNode(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
-            when (node.getHeightDifference()) {
-                2 -> if (node.rightNode?.getHeightDifference() == -1) rightLeftRotate(
-                    tree,
-                    node,
-                    parent
-                ) else leftRotate(
+            when (node.balanceFactor) {
+                RIGHT_SUBTREE_IS_MUCH_BIGGER -> if (node.rightNode?.balanceFactor == LEFT_SUBTREE_IS_BIGGER)
+                    rightLeftRotate(
+                        tree,
+                        node,
+                        parent
+                    ) else leftRotate(
                     tree,
                     node,
                     parent
                 )
-                @Suppress("MagicNumber")
-                -2 -> if (node.leftNode?.getHeightDifference() == 1) leftRightRotate(
-                    tree,
-                    node,
-                    parent
-                ) else rightRotate(
+                LEFT_SUBTREE_IS_MUCH_BIGGER -> if (node.leftNode?.balanceFactor == RIGHT_SUBTREE_IS_BIGGER)
+                    leftRightRotate(
+                        tree,
+                        node,
+                        parent
+                    ) else rightRotate(
                     tree,
                     node,
                     parent
