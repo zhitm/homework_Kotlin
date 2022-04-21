@@ -51,18 +51,20 @@ class AVLTreeMap<K : Comparable<K>, V> : MutableMap<K, V> {
     override fun put(key: K, value: V): V? {
         val previousValue = get(key)
         tree.addNode(key, value)
-        if (previousValue == null) {
-            keys.add(key)
-            size++
-        }
+        keys.add(key)
         values.add(value)
         entries.add(Entry(key, value))
+        if (previousValue == null) {
+            size++
+        } else {
+            values.remove(previousValue)
+            entries.remove(Entry(key, previousValue))
+        }
         return previousValue
     }
 
     fun isMapCorrect(): Boolean =
-        tree.isTreeCorrect(tree.root)
-//                && keys.all { tree.hasKey(it) } && keys.size == size && values.size == size
+        tree.isTreeCorrect(tree.root) && keys.all { tree.hasKey(it) } && keys.size == size && values.size == size
 
     fun createDotFile(path: String) {
         fileCreator.createDotFile(path, tree.root)
