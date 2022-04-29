@@ -7,18 +7,20 @@ class GraphvizFileCreator<K, V> {
     private fun writeEdges(root: Node<K, V>, writer: PrintWriter) {
         if (root.leftNode != null) {
             writer.println("${root.key} -> ${root.leftNode!!.key}")
-            writeEdges(root.leftNode!!, writer)
+            root.leftNode?.let { writeEdges(it, writer) }
         }
         if (root.rightNode != null) {
             writer.println("${root.key} -> ${root.rightNode!!.key}")
-            writeEdges(root.rightNode!!, writer)
+            root.rightNode?.let { writeEdges(it, writer) }
         }
     }
 
     fun createDotFile(path: String, root: Node<K, V>?) {
         File(path).printWriter().use { out ->
             out.println("digraph G {")
-            if (root?.isLeaf() == true) out.println(root.key)
+            if (root?.isLeaf() == true) {
+                out.println(root.key)
+            }
             root?.let { writeEdges(it, out) }
             out.println("}")
         }

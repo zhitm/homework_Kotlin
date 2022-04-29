@@ -1,14 +1,18 @@
 package homeworks.hw3.task1
 
+import java.util.LinkedList
+
 class Tree<K : Comparable<K>, V> {
     var root: Node<K, V>? = null
 
     fun get(key: K): Node<K, V>? {
         var current = root
         while (current != null) {
-            current = if (current.key == key) return current
-            else if (current.key > key) current.leftNode
-            else current.rightNode
+            current = when {
+                current.key == key -> return current
+                current.key > key -> current.leftNode
+                else -> current.rightNode
+            }
         }
         return null
     }
@@ -16,18 +20,13 @@ class Tree<K : Comparable<K>, V> {
     fun hasKey(key: K): Boolean = get(key) != null
 
     private fun isBSTRuleDone(node: Node<K, V>?): Boolean {
-        if (node == null) return true
-        val isLeftKeyGreater = if (node.leftNode == null) false else node.leftNode!!.key.compareTo(node.key) == 1
-        val isRightKeyLess = if (node.rightNode == null) false else node.rightNode!!.key.compareTo(node.key) == -1
+        node ?: return true
+        val isLeftKeyGreater = (node.leftNode)?.let { it.key > node.key } ?: false
+        val isRightKeyLess = node.rightNode?.let { it.key < node.key } ?: false
         return (!isLeftKeyGreater || !isRightKeyLess || isTreeCorrect(node.leftNode) && isTreeCorrect(node.rightNode))
     }
 
-    fun isTreeCorrect(root: Node<K, V>?): Boolean {
-        if (root != null) {
-            if (root.isNotBalanced() || !isBSTRuleDone(root)) return false
-        }
-        return true
-    }
+    fun isTreeCorrect(root: Node<K, V>?): Boolean = root?.let { (!root.isNotBalanced() && isBSTRuleDone(root)) } ?: true
 
     fun addNode(key: K, value: V) {
         if (root == null) {
@@ -59,20 +58,21 @@ class Tree<K : Comparable<K>, V> {
     }
 
     private fun getParent(node: Node<K, V>): Node<K, V>? {
-        val key = node.key
         var current = root
         while (current != null) {
-            current = if (current.leftNode == node || current.rightNode == node) return current
-            else if (current.key > key) current.leftNode
-            else current.rightNode
+            current = when {
+                (current.leftNode == node || current.rightNode == node) -> return current
+                (current.key > node.key) -> current.leftNode
+                else -> current.rightNode
+            }
         }
         return null
     }
 
     private fun getMinFromSubtree(root: Node<K, V>): Node<K, V> {
         var current = root
-        while (current.leftNode != null) {
-            current = current.leftNode!!
+        while (true) {
+            current = current.leftNode ?: break
         }
         return current
     }
@@ -80,25 +80,27 @@ class Tree<K : Comparable<K>, V> {
     fun deleteNode(key: K) {
         val nodeToDelete = get(key) ?: return
         val parent = getParent(nodeToDelete)
-        if (nodeToDelete.isLeaf()) {
-
-            parent?.replaceChild(nodeToDelete, null)
-            Balancer.changeRootIfNecessary(this, nodeToDelete, null)
-        } else if (nodeToDelete.leftNode != null && nodeToDelete.rightNode != null) {
-
-            val nodeToReplace = getMinFromSubtree(nodeToDelete.rightNode!!)
-            deleteNode(nodeToReplace.key)
-            nodeToDelete.key = nodeToReplace.key
-            nodeToDelete.value = nodeToReplace.value
-        } else if (nodeToDelete.leftNode != null) {
-
-            parent?.replaceChild(nodeToDelete, nodeToDelete.leftNode)
-            Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.leftNode)
-        } else {
-
-            parent?.replaceChild(nodeToDelete, nodeToDelete.rightNode)
-            Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.rightNode)
+        when {
+            (nodeToDelete.isLeaf()) -> {
+                parent?.replaceChild(nodeToDelete, null)
+                Balancer.changeRootIfNecessary(this, nodeToDelete, null)
+            }
+            (nodeToDelete.leftNode != null && nodeToDelete.rightNode != null) -> {
+                val nodeToReplace = getMinFromSubtree(nodeToDelete.rightNode!!)
+                deleteNode(nodeToReplace.key)
+                nodeToDelete.key = nodeToReplace.key
+                nodeToDelete.value = nodeToReplace.value
+            }
+            (nodeToDelete.leftNode != null) -> {
+                parent?.replaceChild(nodeToDelete, nodeToDelete.leftNode)
+                Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.leftNode)
+            }
+            else -> {
+                parent?.replaceChild(nodeToDelete, nodeToDelete.rightNode)
+                Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.rightNode)
+            }
         }
+
         root?.let { updateHeightAndBalance(it, null) }
     }
 
@@ -106,7 +108,9 @@ class Tree<K : Comparable<K>, V> {
         node.leftNode?.let { updateHeightAndBalance(it, node) }
         node.rightNode?.let { updateHeightAndBalance(it, node) }
         node.updateHeight()
-        if (node.isNotBalanced()) Balancer.balanceNode(this, node, parent)
+        if (node.isNotBalanced()) {
+            Balancer.balanceNode(this, node, parent)
+        }
     }
 
     private object Balancer {
@@ -115,12 +119,14 @@ class Tree<K : Comparable<K>, V> {
         const val RIGHT_SUBTREE_IS_MUCH_BIGGER = 2
         const val RIGHT_SUBTREE_IS_BIGGER = 1
         fun <K : Comparable<K>, V> changeRootIfNecessary(tree: Tree<K, V>, parent: Node<K, V>, child: Node<K, V>?) {
-            if (parent == tree.root) tree.root = child
+            if (parent == tree.root) {
+                tree.root = child
+            }
         }
 
         fun <K : Comparable<K>, V> leftRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
             changeRootIfNecessary(tree, node, node.rightNode)
-            val newSubtreeRoot = node.rightNode!!
+            val newSubtreeRoot = node.rightNode ?: return node
             parent?.replaceChild(node, node.rightNode)
             node.rightNode = newSubtreeRoot.leftNode
             newSubtreeRoot.leftNode = node
@@ -132,7 +138,7 @@ class Tree<K : Comparable<K>, V> {
 
         fun <K : Comparable<K>, V> rightRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
             changeRootIfNecessary(tree, node, node.leftNode)
-            val newSubtreeRoot = node.leftNode!!
+            val newSubtreeRoot = node.leftNode ?: return node
             parent?.replaceChild(node, node.leftNode)
             node.leftNode = newSubtreeRoot.rightNode
             newSubtreeRoot.rightNode = node
@@ -143,38 +149,45 @@ class Tree<K : Comparable<K>, V> {
         }
 
         fun <K : Comparable<K>, V> leftRightRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
-            leftRotate(tree, node.leftNode!!, node)
+            node.leftNode?.let { leftRotate(tree, it, node) }
             rightRotate(tree, node, parent)
         }
 
         fun <K : Comparable<K>, V> rightLeftRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
-            rightRotate(tree, node.rightNode!!, node)
+            node.rightNode?.let { rightRotate(tree, it, node) }
             leftRotate(tree, node, parent)
         }
 
         fun <K : Comparable<K>, V> balanceNode(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?) {
             when (node.balanceFactor) {
-                RIGHT_SUBTREE_IS_MUCH_BIGGER -> if (node.rightNode?.balanceFactor == LEFT_SUBTREE_IS_BIGGER)
-                    rightLeftRotate(
-                        tree,
-                        node,
-                        parent
-                    ) else leftRotate(
-                    tree,
-                    node,
-                    parent
-                )
-                LEFT_SUBTREE_IS_MUCH_BIGGER -> if (node.leftNode?.balanceFactor == RIGHT_SUBTREE_IS_BIGGER)
-                    leftRightRotate(
-                        tree,
-                        node,
-                        parent
-                    ) else rightRotate(
-                    tree,
-                    node,
-                    parent
-                )
+                RIGHT_SUBTREE_IS_MUCH_BIGGER ->
+                    if (node.rightNode?.balanceFactor == LEFT_SUBTREE_IS_BIGGER) {
+                        rightLeftRotate(tree, node, parent)
+                    } else {
+                        leftRotate(tree, node, parent)
+                    }
+                LEFT_SUBTREE_IS_MUCH_BIGGER ->
+                    if (node.leftNode?.balanceFactor == RIGHT_SUBTREE_IS_BIGGER) {
+                        leftRightRotate(tree, node, parent)
+                    } else {
+                        rightRotate(tree, node, parent)
+                    }
             }
+        }
+    }
+
+    object Visitor {
+        fun <K : Comparable<K>, V, T> visit(root: Node<K, V>?, value: (node: Node<K, V>) -> T): MutableSet<T> {
+            val queue = LinkedList<Node<K, V>>()
+            root?.let{queue.add(it)}
+            val treeSet = mutableSetOf<T>()
+            while (queue.isNotEmpty()) {
+                val current = queue.pop()
+                treeSet.add(value(current))
+                current.leftNode?.let { queue.add(it) }
+                current.rightNode?.let { queue.add(it) }
+            }
+            return treeSet
         }
     }
 }

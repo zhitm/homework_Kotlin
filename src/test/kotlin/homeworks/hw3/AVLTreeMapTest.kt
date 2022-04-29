@@ -26,7 +26,7 @@ class AVLTreeMapTest {
 
     @ParameterizedTest
     @MethodSource("dataForPutAndCheckValues")
-    fun `test put and values list`(entries: List<Pair<Int, Int>>, values: List<Int>) {
+    fun `test put and values list`(entries: List<Pair<Int, Int>>, values: Set<Int>) {
         val map: AVLTreeMap<Int, Int> = AVLTreeMap()
         entries.forEach { map[it.first] = it.second }
         assertEquals(map.values, values)
@@ -105,11 +105,11 @@ class AVLTreeMapTest {
 
         @JvmStatic
         fun dataForPutAndCheckValues() = listOf(
-            Arguments.of(listOf(Pair(7, 1), Pair(2, 10), Pair(3, 100)), listOf(1, 10, 100)),
-            Arguments.of(listOf(Pair(3, 1), Pair(1, 9), Pair(1, 100)), listOf(1, 100)),
-            Arguments.of(listOf(Pair(4, 4), Pair(8, 8)), listOf(4, 8)),
-            Arguments.of(listOf(Pair(1, 1)), listOf(1)),
-            Arguments.of(listOf<Pair<Int, Int>>(), listOf<Int>())
+            Arguments.of(listOf(Pair(7, 1), Pair(2, 10), Pair(3, 100)), setOf(1, 10, 100)),
+            Arguments.of(listOf(Pair(3, 1), Pair(1, 9), Pair(1, 100)), setOf(1, 100)),
+            Arguments.of(listOf(Pair(4, 4), Pair(8, 8)), setOf(4, 8)),
+            Arguments.of(listOf(Pair(1, 1)), setOf(1)),
+            Arguments.of(listOf<Pair<Int, Int>>(), setOf<Int>())
         )
 
         @JvmStatic

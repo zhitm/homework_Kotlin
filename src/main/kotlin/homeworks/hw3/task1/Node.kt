@@ -1,6 +1,7 @@
 package homeworks.hw3.task1
 
 import java.lang.Integer.max
+import kotlin.math.abs
 
 class Node<K, V>(var key: K, var value: V) {
     var leftNode: Node<K, V>? = null
@@ -18,11 +19,11 @@ class Node<K, V>(var key: K, var value: V) {
     }
 
     fun updateHeight() {
-        val leftHeight = if (leftNode == null) 0 else leftNode!!.height + 1
-        val rightHeight = if (rightNode == null) 0 else rightNode!!.height + 1
+        val leftHeight = leftNode?.let { it.height + 1 } ?: 0
+        val rightHeight = rightNode?.let { it.height + 1 } ?: 0
         height = max(leftHeight, rightHeight)
     }
 
-    fun isNotBalanced(): Boolean = kotlin.math.abs(balanceFactor) > 1
+    fun isNotBalanced(): Boolean = abs(balanceFactor) > 1
     fun isLeaf(): Boolean = (leftNode == null && rightNode == null)
 }
