@@ -28,31 +28,26 @@ class Tree<K : Comparable<K>, V> {
 
     fun isTreeCorrect(root: Node<K, V>?): Boolean = root?.let { (!root.isNotBalanced() && isBSTRuleDone(root)) } ?: true
 
+    private fun getNewNodeParent(root: Node<K, V>, key: K): Node<K, V> =
+        if (key > root.key) root.rightNode?.let { getNewNodeParent(it, key) } ?: root
+        else root.leftNode?.let { getNewNodeParent(it, key) } ?: root
+
     fun addNode(key: K, value: V) {
         if (root == null) {
             root = Node(key, value)
             return
         }
-        var last: Node<K, V> = root as Node<K, V>
         val nodeWithThisKey = get(key)
         if (nodeWithThisKey != null) {
             nodeWithThisKey.value = value
             return
         }
-        var currentNode = root
-        while (currentNode != null) {
-            last = currentNode
-            currentNode = if (key > currentNode.key) {
-                currentNode.rightNode
-            } else {
-                currentNode.leftNode
-            }
-        }
+        val parent: Node<K, V> = getNewNodeParent(root as Node<K, V>, key)
         val newNode = Node(key, value)
-        if (key >= last.key) {
-            last.rightNode = newNode
+        if (key >= parent.key) {
+            parent.rightNode = newNode
         } else {
-            last.leftNode = newNode
+            parent.leftNode = newNode
         }
         root?.let { updateHeightAndBalance(it, null) }
     }
@@ -124,24 +119,43 @@ class Tree<K : Comparable<K>, V> {
             }
         }
 
-        fun <K : Comparable<K>, V> leftRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-            changeRootIfNecessary(tree, node, node.rightNode)
-            val newSubtreeRoot = node.rightNode ?: return node
-            parent?.replaceChild(node, node.rightNode)
-            node.rightNode = newSubtreeRoot.leftNode
-            newSubtreeRoot.leftNode = node
-            node.updateHeight()
-            newSubtreeRoot.updateHeight()
-            parent?.updateHeight()
-            return newSubtreeRoot
-        }
+        fun <K : Comparable<K>, V> leftRotate(tree: Tree<K, V>, root: Node<K, V>, parent: Node<K, V>?): Node<K, V> =
+            sidedRotate(
+                tree,
+                root,
+                parent,
+                { node -> node.leftNode },
+                { node, newLeft -> node.leftNode = newLeft },
+                { node -> node.rightNode },
+                { node, newRight -> node.rightNode = newRight }
+            )
 
-        fun <K : Comparable<K>, V> rightRotate(tree: Tree<K, V>, node: Node<K, V>, parent: Node<K, V>?): Node<K, V> {
-            changeRootIfNecessary(tree, node, node.leftNode)
-            val newSubtreeRoot = node.leftNode ?: return node
-            parent?.replaceChild(node, node.leftNode)
-            node.leftNode = newSubtreeRoot.rightNode
-            newSubtreeRoot.rightNode = node
+        fun <K : Comparable<K>, V> rightRotate(tree: Tree<K, V>, root: Node<K, V>, parent: Node<K, V>?): Node<K, V> =
+            sidedRotate(
+                tree,
+                root,
+                parent,
+                { node -> node.rightNode },
+                { node, newRight -> node.rightNode = newRight },
+                { node -> node.leftNode },
+                { node, newLeft -> node.leftNode = newLeft }
+            )
+
+        @Suppress("LongParameterList")
+        fun <K : Comparable<K>, V> sidedRotate(
+            tree: Tree<K, V>,
+            node: Node<K, V>,
+            parent: Node<K, V>?,
+            getSidedChild: (Node<K, V>) -> (Node<K, V>?),
+            changeSidedChild: (Node<K, V>, Node<K, V>?) -> (Unit),
+            getOtherSidedChild: (Node<K, V>) -> (Node<K, V>?),
+            changeOtherSidedChild: (Node<K, V>, Node<K, V>?) -> (Unit)
+        ): Node<K, V> {
+            changeRootIfNecessary(tree, node, getOtherSidedChild(node))
+            val newSubtreeRoot = getOtherSidedChild(node) ?: return node
+            parent?.replaceChild(node, getOtherSidedChild(node))
+            changeOtherSidedChild(node, getSidedChild(newSubtreeRoot))
+            changeSidedChild(newSubtreeRoot, node)
             node.updateHeight()
             newSubtreeRoot.updateHeight()
             parent?.updateHeight()
@@ -179,7 +193,7 @@ class Tree<K : Comparable<K>, V> {
     object Visitor {
         fun <K : Comparable<K>, V, T> visit(root: Node<K, V>?, value: (node: Node<K, V>) -> T): MutableSet<T> {
             val queue = LinkedList<Node<K, V>>()
-            root?.let{queue.add(it)}
+            root?.let { queue.add(it) }
             val treeSet = mutableSetOf<T>()
             while (queue.isNotEmpty()) {
                 val current = queue.pop()

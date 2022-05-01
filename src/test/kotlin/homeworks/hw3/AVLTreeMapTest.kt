@@ -84,7 +84,7 @@ class AVLTreeMapTest {
     companion object {
         @JvmStatic
         fun dataForPutAndCheckCorrectness() = listOf(
-            Arguments.of(List(500) { Pair(it, it) }),
+            Arguments.of(List(500) { Pair(500 - it, 500 - it) }),
             Arguments.of(List(700) { Pair(it, it) }),
             Arguments.of(List(239) { Pair(it, it) }),
             Arguments.of(listOf(Pair(1, 1), Pair(2, 10), Pair(3, 100))),
