@@ -1,16 +1,11 @@
 package homeworks.hw4.task1
 
+import java.util.concurrent.ForkJoinPool
+
 fun main(){
-    val list = List(100000){it}.shuffled()
-    val sorter = ParallelQuickSort(list, 4)
-    sorter.run()
-//    println(sorter.list.toString())
-    println(sorter.isSorted())
-    println(sorter.timeElapsed)
-    println("--------")
-    val sorter2 = ParallelQuickSort(list, 1)
-    sorter2.run()
-//    println(sorter2.list.toString())
-    println(sorter2.isSorted())
-    println(sorter2.timeElapsed)
+    val executor = ForkJoinPool()
+    val myPool = QSortThreadPool<Int>(executor)
+    val list = mutableListOf(2,1,4,3,7,2342,2)
+    myPool.sort(list)
+    println(list)
 }
