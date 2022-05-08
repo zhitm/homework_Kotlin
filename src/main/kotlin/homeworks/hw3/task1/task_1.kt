@@ -51,9 +51,8 @@ fun main() {
     )
     while (true) {
         when (val command = readLine()) {
-            "exit" -> {
-                break
-            }
+            "exit" -> break
+
             else -> command?.let { execute(it, map) }
         }
     }

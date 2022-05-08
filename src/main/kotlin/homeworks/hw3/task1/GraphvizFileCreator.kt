@@ -5,13 +5,13 @@ import java.io.PrintWriter
 
 class GraphvizFileCreator<K, V> {
     private fun writeEdges(root: Node<K, V>, writer: PrintWriter) {
-        if (root.leftNode != null) {
-            writer.println("${root.key} -> ${root.leftNode!!.key}")
-            root.leftNode?.let { writeEdges(it, writer) }
+        root.leftNode?.let {
+            writer.println("${root.key} -> ${it.key}")
+            writeEdges(it, writer)
         }
-        if (root.rightNode != null) {
-            writer.println("${root.key} -> ${root.rightNode!!.key}")
-            root.rightNode?.let { writeEdges(it, writer) }
+        root.rightNode?.let {
+            writer.println("${root.key} -> ${it.key}")
+            writeEdges(it, writer)
         }
     }
 

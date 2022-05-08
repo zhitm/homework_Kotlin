@@ -14,23 +14,14 @@ class AVLTreeMap<K : Comparable<K>, V> : MutableMap<K, V> {
 
     override fun clear() {
         size = 0
-        keys.clear()
-        values.clear()
-        entries.clear()
         tree.root = null
     }
 
-    override fun get(key: K): V? {
-        return tree.get(key)?.value
-    }
+    override fun get(key: K): V? = tree.get(key)?.value
 
-    override fun containsKey(key: K): Boolean {
-        return tree.hasKey(key)
-    }
+    override fun containsKey(key: K): Boolean = tree.hasKey(key)
 
-    override fun containsValue(value: V): Boolean {
-        return values.contains(value)
-    }
+    override fun containsValue(value: V): Boolean = values.contains(value)
 
     override fun isEmpty(): Boolean = size == 0
 
@@ -39,9 +30,6 @@ class AVLTreeMap<K : Comparable<K>, V> : MutableMap<K, V> {
         if (value != null) {
             tree.deleteNode(key)
             size--
-            keys.remove(key)
-            values.remove(value)
-            entries.remove(Entry(key, value))
         }
         return value
     }
@@ -51,14 +39,8 @@ class AVLTreeMap<K : Comparable<K>, V> : MutableMap<K, V> {
     override fun put(key: K, value: V): V? {
         val previousValue = get(key)
         tree.addNode(key, value)
-        keys.add(key)
-        values.add(value)
-        entries.add(Entry(key, value))
         if (previousValue == null) {
             size++
-        } else {
-            values.remove(previousValue)
-            entries.remove(Entry(key, previousValue))
         }
         return previousValue
     }

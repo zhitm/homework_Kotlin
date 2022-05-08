@@ -21,7 +21,7 @@ class AVLTreeMapTest {
     fun `test put and keys set`(entries: List<Pair<Int, Int>>, keys: Set<Int>) {
         val map: AVLTreeMap<Int, Int> = AVLTreeMap()
         entries.forEach { map[it.first] = it.second }
-        assertEquals(map.keys, keys)
+        assertEquals(keys, map.keys)
     }
 
     @ParameterizedTest
@@ -29,7 +29,7 @@ class AVLTreeMapTest {
     fun `test put and values list`(entries: List<Pair<Int, Int>>, values: Set<Int>) {
         val map: AVLTreeMap<Int, Int> = AVLTreeMap()
         entries.forEach { map[it.first] = it.second }
-        assertEquals(map.values, values)
+        assertEquals(values, map.values)
     }
 
     @ParameterizedTest
