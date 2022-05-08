@@ -6,7 +6,7 @@ import kotlin.math.abs
 class Node<K, V>(var key: K, var value: V) {
     var leftNode: Node<K, V>? = null
     var rightNode: Node<K, V>? = null
-    var height = 0
+    private var height = 0
     val balanceFactor
         get() = (rightNode?.height?.plus(1) ?: 0) - (leftNode?.height?.plus(1) ?: 0)
 
