@@ -82,7 +82,7 @@ class Tree<K : Comparable<K>, V> {
                 Balancer.changeRootIfNecessary(this, nodeToDelete, null)
             }
             (nodeToDelete.leftNode != null && nodeToDelete.rightNode != null) -> {
-                val nodeToReplace = getMinFromSubtree(nodeToDelete.rightNode!!)
+                val nodeToReplace = nodeToDelete.rightNode?.let { getMinFromSubtree(it) } ?: nodeToDelete
                 deleteNode(nodeToReplace.key)
                 nodeToDelete.key = nodeToReplace.key
                 nodeToDelete.value = nodeToReplace.value
@@ -96,7 +96,6 @@ class Tree<K : Comparable<K>, V> {
                 Balancer.changeRootIfNecessary(this, nodeToDelete, nodeToDelete.rightNode)
             }
         }
-
         root?.let { updateHeightAndBalance(it, null) }
     }
 
