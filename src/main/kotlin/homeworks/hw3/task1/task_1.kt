@@ -7,34 +7,46 @@ fun addShuffledKeysFromRange(map: AVLTreeMap<Int, Int>, range: IntRange) = range
 @Suppress("MagicNumber")
 fun execute(command: String, map: AVLTreeMap<Int, Int>) {
     val splittedInput = command.split(" ")
-    if (splittedInput.size <= 1 || (splittedInput[0] != "add" && splittedInput[0] != "del")) {
+    val size = splittedInput.size
+    if (size < 1) {
         println("It's not a command")
         return
     }
-    when (splittedInput.size) {
-        2 -> {
-            val arg = splittedInput[1].toIntOrNull()
-            if (arg != null) {
-                map.remove(arg)
+    when (splittedInput[0]) {
+        "add" -> {
+            if (size != 3) {
+                println("It's not a command")
+            } else {
+                val firstArg = splittedInput[1].toIntOrNull()
+                val secondArg = splittedInput[2].toIntOrNull()
+                if (firstArg != null && secondArg != null) {
+                    map[firstArg] = secondArg
+                }
             }
         }
-        3 -> {
-            val firstArg = splittedInput[1].toIntOrNull()
-            val secondArg = splittedInput[2].toIntOrNull()
-            if (firstArg != null && secondArg != null) {
-                map[firstArg] = secondArg
-            }
-        }
-        4 -> {
-            if (splittedInput[1] == "range") {
-                val firstArg = splittedInput[2].toIntOrNull()
-                val secondArg = splittedInput[3].toIntOrNull()
+        "add_range" -> {
+            if (size != 3) {
+                println("It's not a command")
+            } else {
+                val firstArg = splittedInput[1].toIntOrNull()
+                val secondArg = splittedInput[2].toIntOrNull()
                 if (firstArg != null && secondArg != null) {
                     addShuffledKeysFromRange(map, firstArg..secondArg)
                 }
-            } else {
-                println("It's not a command")
             }
+        }
+        "del" -> {
+            if (size != 2) {
+                println("It's not a command")
+            } else {
+                val arg = splittedInput[1].toIntOrNull()
+                if (arg != null) {
+                    map.remove(arg)
+                }
+            }
+        }
+        else -> {
+            println("It's not a command")
         }
     }
 }
@@ -52,7 +64,6 @@ fun main() {
     while (true) {
         when (val command = readLine()) {
             "exit" -> break
-
             else -> command?.let { execute(it, map) }
         }
     }
