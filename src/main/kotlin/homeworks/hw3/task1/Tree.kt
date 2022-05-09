@@ -165,7 +165,9 @@ class Tree<K : Comparable<K>, V> {
             }
             parent?.replaceChild(node, newSubtreeRoot)
             parent?.updateHeight()
-            if (node == tree.root) tree.root = newSubtreeRoot
+            if (node == tree.root) {
+                tree.root = newSubtreeRoot
+            }
             return newSubtreeRoot
         }
     }

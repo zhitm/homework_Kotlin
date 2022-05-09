@@ -45,9 +45,7 @@ fun execute(command: String, map: AVLTreeMap<Int, Int>) {
                 }
             }
         }
-        else -> {
-            println("It's not a command")
-        }
+        else -> println("It's not a command")
     }
 }
 
