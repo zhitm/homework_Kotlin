@@ -45,17 +45,9 @@ class Tree<K : Comparable<K>, V> {
 
     private fun insert(root: Node<K, V>, node: Node<K, V>) {
         if (root.key > node.key) {
-            if (root.leftNode != null) {
-                root.leftNode?.let { insert(it, node) }
-            } else {
-                root.leftNode = node
-            }
+            root.leftNode?.let { insert(it, node) } ?: run { root.leftNode = node }
         } else {
-            if (root.rightNode != null) {
-                root.rightNode?.let { insert(it, node) }
-            } else {
-                root.rightNode = node
-            }
+            root.rightNode?.let { insert(it, node) } ?: run { root.rightNode = node }
         }
     }
 
