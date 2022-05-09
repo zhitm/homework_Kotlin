@@ -1,36 +1,36 @@
 package homeworks.hw4.task1
 
-import homeworks.hw4.task1.benchmark.ArrayGenerator
-import homeworks.hw4.task1.qsort.QSort
 import homeworks.hw4.task1.qsort.QSortWithThreads
 import java.util.concurrent.ForkJoinPool
-import kotlin.system.measureTimeMillis
 
 fun main() {
-    val arrayGenerator = ArrayGenerator()
-    val executor = ForkJoinPool.commonPool()
-    val mySorter = QSortWithThreads<Int>(executor)
-    val usualSorter = QSort<Int>()
-    val n = 1000000
-    val arr = arrayGenerator.getRandomArray(n)
-
-    var arr1: Array<Int>
-    var arr2: Array<Int>
-    var summaryTimeParallel: Long = 0
-    var summaryTimeUsual: Long = 0
-    val repeats = 100
-    for (i in 0 until repeats) {
-        arr1 = arrayGenerator.arrayCopy(arr)
-        arr2 = arrayGenerator.arrayCopy(arr)
-        val time1 = measureTimeMillis { mySorter.sort(arr1) }
-        println(time1)
-        val time2 = measureTimeMillis { usualSorter.sort(arr2) }
-        println(time2)
-        summaryTimeParallel += time1
-        summaryTimeUsual += time2
-        println("------")
+    println("Input number of threads:")
+    val threadsNumber = readLine()?.toIntOrNull()
+    if (threadsNumber == null) {
+        println("it's not a number")
+    } else {
+        val executor = ForkJoinPool(threadsNumber)
+        val mySorter = QSortWithThreads<Int>(executor)
+        println("Input the length of the array")
+        val length = readLine()?.toIntOrNull()
+        if (length == null) {
+            println("it's not a number")
+            return
+        }
+        val array = Array(length) { it }
+        for (index in 0 until length) {
+            println("Input the next element")
+            val element = readLine()?.toIntOrNull()
+            if (element == null) {
+                println("It's not a number")
+                return
+            }
+            array[index] = element
+        }
+        mySorter.sort(array)
+        println("Sorted array:")
+        var arrayAsString = ""
+        array.forEach { arrayAsString += "$it " }
+        println(arrayAsString)
     }
-    println("Medium:")
-    println(summaryTimeParallel / repeats)
-    println(summaryTimeUsual / repeats)
 }

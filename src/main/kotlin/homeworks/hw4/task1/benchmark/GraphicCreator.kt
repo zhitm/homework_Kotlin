@@ -4,8 +4,9 @@ import homeworks.hw4.task1.qsort.QSortWithThreads
 import java.util.concurrent.ForkJoinPool
 
 class GraphicCreator {
+    @Suppress("MagicNumber")
     fun createMapForGraphic(threadsCount: Int): Map<String, Any> {
-        val xs = List(30) { it * 4000 }
+        val xs = List(50) { it * 10000 }
         val sorter = QSortWithThreads<Int>(ForkJoinPool(threadsCount))
         val benchmark = Benchmark()
         val arrayGenerator = ArrayGenerator()
@@ -15,6 +16,6 @@ class GraphicCreator {
                 arrayGenerator.getRandomArray(it), 15
             )
         }
-        return mapOf<String, Any>("x" to xs, "y" to ys)
+        return mapOf<String, Any>("threads" to List(xs.size) { "$threadsCount" }, "x" to xs, "y" to ys)
     }
 }
