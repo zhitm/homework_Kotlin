@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.ForkJoinPool
 import kotlin.test.assertEquals
-
+@Suppress("ArrayPrimitive")
 class TestQSort {
     private val executor: ForkJoinPool = ForkJoinPool.commonPool()
     private val parallelSorter = QSortWithThreads<Int>(executor)

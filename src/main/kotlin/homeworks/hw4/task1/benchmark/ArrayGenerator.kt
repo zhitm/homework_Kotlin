@@ -1,5 +1,5 @@
 package homeworks.hw4.task1.benchmark
-
+@Suppress("ArrayPrimitive")
 class ArrayGenerator {
     fun getRandomArray(size: Int): Array<Int> {
         val list = MutableList(size) { it }.shuffled()

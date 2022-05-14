@@ -12,7 +12,7 @@ fun <T> Array<T>.swap(index1: Int, index2: Int) {
 fun <T : Comparable<T>> Array<T>.isSorted(): Boolean {
     return (0 until this.lastIndex).all { this[it] <= this[it + 1] }
 }
-
+@Suppress("LoopWithTooManyJumpStatements")
 fun <T : Comparable<T>> partition(arr: Array<T>, start: Int, end: Int): Partition {
     var i = start
     var j = end
