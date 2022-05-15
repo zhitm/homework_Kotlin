@@ -56,8 +56,7 @@ fun main() {
         |exit
         |add key value
         |add range minkey maxkey
-        |del key
-    """.trimMargin()
+        |del key""".trimMargin()
     )
     while (true) {
         when (val command = readLine()) {
