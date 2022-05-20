@@ -4,10 +4,7 @@ var currentTopIndex = 0
 var currentLatestIndex = 0
 fun getRandomText(): String {
     val loader = DataLoader()
-    val splittedText = loader.getRandomQuote().split("<div>", "</div>")
-    val size = splittedText.size
-    if (size - 2 < 0) return "Ошибка"
-    return loader.getRandomQuote().split("<div>", "</div>")[size - 2].replace("<br>", "")
+    return loader.getRandomQuote()
 }
 
 fun getPopularText(): String {

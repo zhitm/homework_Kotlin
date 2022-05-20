@@ -11,7 +11,11 @@ class DataLoader {
 
     fun getRandomQuote(): String {
         val html = getHtml("http://bashorg.org/casual")
-        return html?.select(".q div").toString()
+        val quoteWithTags = html?.select(".q div").toString()
+        val splittedText = quoteWithTags.split("<div>", "</div>")
+        val size = splittedText.size
+        if (size - 2 < 0) return "Ошибка"
+        return splittedText[size - 2].replace("<br>", "")
     }
 
     fun getAllQuotes(url: String): List<String> {
