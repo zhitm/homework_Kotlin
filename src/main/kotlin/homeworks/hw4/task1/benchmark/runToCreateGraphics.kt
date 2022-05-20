@@ -1,20 +1,21 @@
 package homeworks.hw4.task1.benchmark
 
 import jetbrains.letsPlot.export.ggsave
-import jetbrains.letsPlot.geom.geomLine
-import jetbrains.letsPlot.geom.geomPoint
-import jetbrains.letsPlot.ggplot
+import jetbrains.letsPlot.geom.geomSmooth
 import jetbrains.letsPlot.ggsize
+import jetbrains.letsPlot.letsPlot
 
 @Suppress("MagicNumber")
 fun main() {
     val graphicCreator = GraphicCreator()
-    for (i in 1..15) {
-        val data = graphicCreator.createMapForGraphic(i)
-        val fig = ggplot(data) { x = "x"; y = "y"; color = "threads" } + geomPoint(size = 2.0) + geomLine() + ggsize(
-            1920,
-            1080
-        )
-        ggsave(fig, "plot_${i}_threads.png")
+    val data = mutableMapOf<String, Any>()
+    val maxThreadsCount = 2
+    for (i in 1..maxThreadsCount) {
+        data += graphicCreator.createMapForGraphic(i)
     }
+    val smooth =
+        (1..maxThreadsCount).map { geomSmooth(method = "loess", se = false) { x = "x$it"; y = "y$it"; color = "$it" } }
+    var fig = letsPlot(data) + ggsize(1920, 1080)
+    smooth.forEach { fig += it }
+    ggsave(fig, "plot_threads.png")
 }
