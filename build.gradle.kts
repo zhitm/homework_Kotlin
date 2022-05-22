@@ -20,7 +20,7 @@ dependencies {
     implementation("org.jetbrains.lets-plot:lets-plot-image-export:2.1.0")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
 }
 
 tasks.test {
