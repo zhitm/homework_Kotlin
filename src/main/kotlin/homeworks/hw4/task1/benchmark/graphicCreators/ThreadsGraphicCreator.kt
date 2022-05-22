@@ -1,10 +1,13 @@
-package homeworks.hw4.task1.benchmark
 
+package homeworks.hw4.task1.benchmark.graphicCreators
+
+import homeworks.hw4.task1.benchmark.ArrayGenerator
+import homeworks.hw4.task1.benchmark.Benchmark
 import homeworks.hw4.task1.qsort.QSortWithThreads
 import java.util.concurrent.ForkJoinPool
 
-class GraphicCreator {
-    fun createMapForGraphic(threadsCount: Int): Map<String, Any> {
+class ThreadsGraphicCreator {
+    fun createMapForGraphic(threadsCount: Int): MutableMap<String, Any> {
         val xs = List(SIZE) { it * STEP }
         val sorter = QSortWithThreads<Int>(ForkJoinPool(threadsCount))
         val benchmark = Benchmark()
@@ -15,7 +18,11 @@ class GraphicCreator {
                 arrayGenerator.getRandomArray(it), REPEATS
             )
         }
-        return mapOf<String, Any>("threads" to List(xs.size) { "$threadsCount" }, "x" to xs, "y" to ys)
+        return mutableMapOf(
+            "$threadsCount" to List(SIZE) { "$threadsCount" },
+            "x$threadsCount" to xs,
+            "y$threadsCount" to ys
+        )
     }
 
     companion object PARAMS {

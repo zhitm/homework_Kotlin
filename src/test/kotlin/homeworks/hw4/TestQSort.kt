@@ -3,6 +3,7 @@ package homeworks.hw4
 import homeworks.hw4.task1.benchmark.ArrayGenerator
 import homeworks.hw4.task1.isSorted
 import homeworks.hw4.task1.qsort.QSort
+import homeworks.hw4.task1.qsort.QSortCoroutines
 import homeworks.hw4.task1.qsort.QSortWithThreads
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -13,11 +14,19 @@ import kotlin.test.assertEquals
 class TestQSort {
     private val executor: ForkJoinPool = ForkJoinPool.commonPool()
     private val parallelSorter = QSortWithThreads<Int>(executor)
+    private val coroutinesSorter = QSortCoroutines<Int>()
     private val usualSorter = QSort<Int>()
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
     fun `test parallel sort`(array: Array<Int>) {
+        coroutinesSorter.sort(array)
+        assertEquals(true, array.isSorted())
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataForSorts")
+    fun `test coroutines sort`(array: Array<Int>) {
         parallelSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
