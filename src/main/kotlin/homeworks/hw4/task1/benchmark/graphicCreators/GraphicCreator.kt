@@ -1,4 +1,3 @@
-
 package homeworks.hw4.task1.benchmark.graphicCreators
 
 import homeworks.hw4.task1.benchmark.ArrayGenerator
