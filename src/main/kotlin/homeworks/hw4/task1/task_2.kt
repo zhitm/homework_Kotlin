@@ -1,9 +1,9 @@
 package homeworks.hw4.task1
 
-import homeworks.hw4.task1.qsort.QSortCoroutines
+import homeworks.hw4.task1.qsort.QSortWithCoroutines
 
 fun main() {
-    val mySorter = QSortCoroutines<Int>()
+    val mySorter = QSortWithCoroutines<Int>()
     println("Input the length of the array")
     val length = readLine()?.toIntOrNull()
     if (length == null) {

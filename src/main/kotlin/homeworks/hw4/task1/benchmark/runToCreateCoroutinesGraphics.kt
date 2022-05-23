@@ -2,7 +2,7 @@ package homeworks.hw4.task1.benchmark
 
 import homeworks.hw4.task1.benchmark.graphicCreators.GraphicCreator
 import homeworks.hw4.task1.qsort.QSort
-import homeworks.hw4.task1.qsort.QSortCoroutines
+import homeworks.hw4.task1.qsort.QSortWithCoroutines
 import jetbrains.letsPlot.export.ggsave
 import jetbrains.letsPlot.geom.geomSmooth
 import jetbrains.letsPlot.ggsize
@@ -10,7 +10,7 @@ import jetbrains.letsPlot.letsPlot
 
 @Suppress("MagicNumber")
 fun main() {
-    val coroutinesGraphicCreator = GraphicCreator(QSortCoroutines(), "coroutines", 1)
+    val coroutinesGraphicCreator = GraphicCreator(QSortWithCoroutines(), "coroutines", 1)
     val usualGraphicCreator = GraphicCreator(QSort<Int>(), "usual sort", 2)
     val data = coroutinesGraphicCreator.createMapForGraphic() + usualGraphicCreator.createMapForGraphic()
     val fig = letsPlot(data) + ggsize(1920, 1080) + geomSmooth(method = "loess", se = false) {

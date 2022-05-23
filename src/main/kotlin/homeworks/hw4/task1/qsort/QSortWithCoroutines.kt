@@ -4,13 +4,13 @@ package homeworks.hw4.task1.qsort
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-class QSortCoroutines<T : Comparable<T>> : Sort<T> {
+class QSortWithCoroutines<T : Comparable<T>> : Sort<T> {
     override fun sort(array: Array<T>, leftIndex: Int, rightIndex: Int) {
         runBlocking {
             coroutineSort(array, leftIndex, rightIndex)
         }
     }
-    suspend fun coroutineSort(array: Array<T>, leftIndex: Int, rightIndex: Int){
+    private suspend fun coroutineSort(array: Array<T>, leftIndex: Int, rightIndex: Int){
         runBlocking {
             if (rightIndex <= leftIndex) return@runBlocking
             val newPartition = homeworks.hw4.task1.partition(array, leftIndex, rightIndex)
