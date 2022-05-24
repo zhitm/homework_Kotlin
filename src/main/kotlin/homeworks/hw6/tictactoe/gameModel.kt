@@ -1,9 +1,11 @@
 package homeworks.hw6.tictactoe
 
-var game: Game = Game()
+import homeworks.hw6.tictactoe.enums.FigureType
+import homeworks.hw6.tictactoe.enums.GameType
 
-fun startGame(): ViewModel.State {
-    game.startGame()
+var game: Game = Game(GameType.AGAINST_YOURSELF)
+fun startGame(gameType: GameType): ViewModel.State {
+    game.startGame(gameType, FigureType.CIRCLE)
     return getState()
 }
 

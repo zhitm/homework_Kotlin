@@ -1,20 +1,34 @@
 package homeworks.hw6.tictactoe
 
+import homeworks.hw6.tictactoe.PCgamer.Move
+import homeworks.hw6.tictactoe.PCgamer.Node
+import homeworks.hw6.tictactoe.PCgamer.TreeOfGames
 import homeworks.hw6.tictactoe.enums.FigureType
 import homeworks.hw6.tictactoe.enums.GameState
+import homeworks.hw6.tictactoe.enums.GameType
 
-class Game {
+class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE) {
+//    private val tree = TreeOfGames(Node(this))
+
+    private val gamerFigure = if (PCFigure == FigureType.CIRCLE) FigureType.CROSS else FigureType.CIRCLE
+    var isAwaitingPC = PCFigure != FigureType.CIRCLE
     var nextPlayer = FigureType.CROSS
         private set
+
     var state: GameState = GameState.AWAITING_START
         private set
     var board = Board()
         private set
-    private var winner: FigureType = FigureType.EMPTY
+    var winner: FigureType = FigureType.EMPTY
+
     fun isOver(): Boolean = state == GameState.OVER
     fun isActive(): Boolean = state == GameState.ACTIVE
     fun isAwaitingStart(): Boolean = state == GameState.AWAITING_START
-    fun startGame() {
+
+    fun startGame(gameType: GameType, PCFigure: FigureType ) {
+        this.PCFigure = PCFigure
+//        добавить выбор крестиков для пк
+        this.gameType = gameType
         state = GameState.ACTIVE
         board = Board()
         nextPlayer = FigureType.CROSS
@@ -27,11 +41,31 @@ class Game {
         checkNoEmptyCells()
     }
 
+    private fun tryToMove(row: Int, column: Int) {
+        if (board.makeMove(row, column, nextPlayer)) {
+            changePlayer()
+            checkGameState()
+        }
+    }
+
     fun makeMove(row: Int, column: Int) {
         if (isActive()) {
-            if (board.makeMove(row, column, nextPlayer)) {
-                changePlayer()
-                checkGameState()
+            when (gameType) {
+                GameType.AGAINST_YOURSELF -> tryToMove(row, column)
+                GameType.AGAINST_PC -> {
+                    if (isAwaitingPC) return
+                    if (gamerFigure == nextPlayer) {
+                        makeMove(row, column)
+//                        tree.changeRootByMove(Move(row, column, gamerFigure))
+                    }
+                    else {
+//                        ход компухтера
+                        isAwaitingPC = true
+//                        val bestMove = tree.getBestMove()
+//                        tryToMove(bestMove.row,bestMove.column)
+                        isAwaitingPC = false
+                    }
+                }
             }
         }
     }
@@ -84,4 +118,13 @@ class Game {
     private fun overGame() {
         state = GameState.OVER
     }
+
+    fun copy(): Game {
+        val gameCopy = Game(gameType, PCFigure)
+        gameCopy.board = board
+        gameCopy.state = state
+        gameCopy.nextPlayer = nextPlayer
+        return gameCopy
+    }
+
 }
