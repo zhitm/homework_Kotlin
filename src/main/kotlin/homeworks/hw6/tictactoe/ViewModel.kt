@@ -21,12 +21,5 @@ class ViewModel {
 
     fun onCellClick(row: Int, column: Int) {
         updateState(makeMove(row, column))
-        state.board.field.forEach {
-            it.forEach { print(it)
-            print(" ")
-            }
-            println()
-        }
-        println("____")
     }
 }

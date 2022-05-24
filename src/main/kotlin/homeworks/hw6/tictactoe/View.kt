@@ -1,35 +1,30 @@
 package homeworks.hw6.tictactoe
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
-import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import homeworks.hw6.tictactoe.view.Board
+import androidx.compose.material.Text
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview
 fun view(viewModel: ViewModel) {
-    val state = viewModel.state
     Column {
-        Board(3,3, viewModel)
-        Button(onClick = { viewModel.updateState(startGame()) }) { Text("New game") }
+        Button(onClick = { viewModel.updateState(startGame()) }) { Text("Сам с собой") }
+        Button(onClick = { }) { Text("Против компьютера (not ready yet)") }
+
+        if (!game.isAwaitingStart()) {
+            Board(3, 3, viewModel)
+        }
+        if (game.isOver()) {
+            AlertDialog(onDismissRequest = { println(1) }, title = { Text("Игра окончена") },
+                text = { Text("В каком режиме дальше?") },
+                confirmButton = { Button(onClick = { viewModel.updateState(startGame()) }) { Text("Cам с собой") } },
+                dismissButton = { Button(onClick = { viewModel.updateState(startGame()) }) { Text("Против компьютера") } })
+        }
     }
 }

@@ -13,4 +13,3 @@ fun makeMove(row: Int, column: Int): ViewModel.State {
     game.makeMove(row, column)
     return getState()
 }
-

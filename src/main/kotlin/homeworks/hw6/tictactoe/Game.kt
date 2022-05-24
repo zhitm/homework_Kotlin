@@ -10,7 +10,7 @@ class Game {
         private set
     var board = Board()
         private set
-    private var winner: FigureType? = null
+    private var winner: FigureType = FigureType.EMPTY
     fun isOver(): Boolean = state == GameState.OVER
     fun isActive(): Boolean = state == GameState.ACTIVE
     fun isAwaitingStart(): Boolean = state == GameState.AWAITING_START
@@ -20,10 +20,11 @@ class Game {
         nextPlayer = FigureType.CROSS
     }
 
-    fun checkGameState() {
+    private fun checkGameState() {
         checkWinInRow()
         checkWinInColumn()
         checkWinInDiagonal()
+        checkNoEmptyCells()
     }
 
     fun makeMove(row: Int, column: Int) {
@@ -75,8 +76,12 @@ class Game {
         }
     }
 
+    private fun checkNoEmptyCells() {
+        board.field.forEach { row -> row.forEach { if (it == FigureType.EMPTY) return } }
+        overGame()
+    }
+
     private fun overGame() {
         state = GameState.OVER
-//        создать окошко и предлжить начать заново
     }
 }

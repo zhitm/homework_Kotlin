@@ -10,9 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import homeworks.hw6.tictactoe.ViewModel
 import homeworks.hw6.tictactoe.enums.FigureType
-import homeworks.hw6.tictactoe.makeMove
 
 @Composable
 fun Cell(row: Int, column: Int, figure: FigureType, onCellClick: (Int, Int) -> Unit) {
