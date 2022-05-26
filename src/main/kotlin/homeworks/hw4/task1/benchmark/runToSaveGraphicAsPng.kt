@@ -7,9 +7,10 @@ import jetbrains.letsPlot.letsPlot
 
 @Suppress("MagicNumber")
 fun main() {
+
     val graphicCreator = GraphicCreator()
     val data = mutableMapOf<String, Any>()
-    val maxThreadsCount = 2
+    val maxThreadsCount = 5
     for (i in 1..maxThreadsCount) {
         data += graphicCreator.createMapForGraphic(i)
     }

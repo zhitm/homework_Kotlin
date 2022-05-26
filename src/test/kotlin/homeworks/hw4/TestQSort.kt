@@ -9,22 +9,22 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.ForkJoinPool
 import kotlin.test.assertEquals
-@Suppress("ArrayPrimitive")
+
 class TestQSort {
     private val executor: ForkJoinPool = ForkJoinPool.commonPool()
-    private val parallelSorter = QSortWithThreads<Int>(executor)
-    private val usualSorter = QSort<Int>()
+    private val parallelSorter = QSortWithThreads(executor)
+    private val usualSorter = QSort()
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test parallel sort`(array: Array<Int>) {
+    fun `test parallel sort`(array: IntArray) {
         parallelSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test usual sort`(array: Array<Int>) {
+    fun `test usual sort`(array: IntArray) {
         usualSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
@@ -34,9 +34,9 @@ class TestQSort {
 
         @JvmStatic
         fun dataForSorts() = listOf(
-            Arguments.of(arrayOf(1)),
-            Arguments.of(arrayOf(1, 2)),
-            Arguments.of(arrayOf(1, 5, 2, 4, 3)),
+            Arguments.of(intArrayOf(1)),
+            Arguments.of(intArrayOf(1, 2)),
+            Arguments.of(intArrayOf(1, 5, 2, 4, 3)),
             Arguments.of(arrayGenerator.getRandomArray(1000)),
             Arguments.of(arrayGenerator.getRandomArray(10000)),
             Arguments.of(arrayGenerator.getRandomArray(100000)),

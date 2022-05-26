@@ -1,10 +1,14 @@
 package homeworks.hw4.task1.benchmark
 
 import homeworks.hw4.task1.qsort.QSortWithThreads
+import jetbrains.letsPlot.geom.geomSmooth
+import jetbrains.letsPlot.intern.Plot
+import jetbrains.letsPlot.letsPlot
 import java.util.concurrent.ForkJoinPool
 
 class GraphicCreator {
     fun createMapForGraphic(threadsCount: Int): MutableMap<String, Any> {
+        println("$threadsCount graphic is started computing")
         val xs = List(SIZE) { it * STEP }
         val sorter = QSortWithThreads(ForkJoinPool(threadsCount))
         val benchmark = Benchmark()
@@ -22,9 +26,17 @@ class GraphicCreator {
         )
     }
 
+    fun getPlot(threadCount: Int): Plot {
+        val graphicCreator = GraphicCreator()
+        return letsPlot(graphicCreator.createMapForGraphic(threadCount)) + geomSmooth(
+            method = "loess",
+            se = false
+        ) { x = "x$threadCount"; y = "y$threadCount" }
+    }
+
     companion object PARAMS {
-        const val STEP = 10000
-        const val SIZE = 50
-        const val REPEATS = 15
+        const val STEP = 100
+        const val SIZE = 30
+        const val REPEATS = 8
     }
 }
