@@ -15,8 +15,9 @@ import homeworks.hw6.tictactoe.enums.GameType
 @Preview
 fun view(viewModel: ViewModel) {
     Column {
-        Button(onClick = { viewModel.updateState(startGame(GameType.AGAINST_YOURSELF)) }) { Text("Сам с собой") }
-        Button(onClick = { viewModel.updateState(startGame(GameType.AGAINST_PC)) }) { Text("Против компьютера (not ready yet)") }
+        val state = viewModel.state
+        Button(onClick = { viewModel.updateState(startGame()) }) { Text("Сам с собой") }
+        Button(onClick = { viewModel.updateState(startGame()) }) { Text("Против компьютера (not ready yet)") }
 
         if (!game.isAwaitingStart()) {
             Board(3, 3, viewModel)
@@ -25,13 +26,13 @@ fun view(viewModel: ViewModel) {
             AlertDialog(onDismissRequest = { println(1) }, title = { Text("Игра окончена") },
                 text = { Text("В каком режиме дальше?") },
                 confirmButton = {
-                    Button(onClick = { viewModel.updateState(startGame(GameType.AGAINST_YOURSELF)) }) {
+                    Button(onClick = { viewModel.updateState(startGame()) }) {
                         Text(
                             "Cам с собой"
                         )
                     }
                 },
-                dismissButton = { Button(onClick = { viewModel.updateState(startGame(GameType.AGAINST_PC)) }) { Text("Против компьютера") } })
+                dismissButton = { Button(onClick = { viewModel.updateState(startGame()) }) { Text("Против компьютера") } })
         }
     }
 }

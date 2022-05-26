@@ -1,11 +1,13 @@
 package homeworks.hw6.tictactoe
 
+import homeworks.hw6.tictactoe.PCgamer.PCgamer
 import homeworks.hw6.tictactoe.enums.FigureType
 import homeworks.hw6.tictactoe.enums.GameType
 
-var game: Game = Game(GameType.AGAINST_YOURSELF)
-fun startGame(gameType: GameType): ViewModel.State {
-    game.startGame(gameType, FigureType.CIRCLE)
+var game: Game = Game(GameType.AGAINST_PC, FigureType.CIRCLE)
+var pcGamer = PCgamer(FigureType.CIRCLE)
+fun startGame(): ViewModel.State {
+    game.startGame()
     return getState()
 }
 

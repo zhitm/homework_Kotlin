@@ -3,21 +3,18 @@ package homeworks.hw6.tictactoe.PCgamer
 import homeworks.hw6.tictactoe.Game
 import homeworks.hw6.tictactoe.enums.FigureType
 
-class Node(private val game: Game, private val parent: Node? = null, val move: Move? = null) {
+class Node(private val game: Game, private val parent: Node? = null, val move: Move? = null, val depth: Int = 0) {
+    private var PCwinCount = 0
+    private var gamerWinCount = 0
+    var children = mutableListOf<Node>()
     init {
         addLeafs()
     }
-    var children = mutableListOf<Node>()
     val isLeaf: Boolean
         get() = children.isEmpty()
     val coeffOfWin
-        get() = if (subtreeLeafsCount != 0) {
-            winCountAtSubtree / subtreeLeafsCount
-        } else {
-            1
-        }
-    private var winCountAtSubtree = 0
-    private var subtreeLeafsCount = 0
+        get() = PCwinCount - gamerWinCount
+
     private fun updateSizes(increment: (Node) -> Unit) {
         parent?.let {
             increment(it)
@@ -37,16 +34,22 @@ class Node(private val game: Game, private val parent: Node? = null, val move: M
         return moves
     }
 
+    fun printBoard(){
+        println("${move?.row} ${move?.column}")
+        game.board.field.forEach { row -> row.forEach { print(it) ; print(" ") }; println() }
+        println("--------")
+    }
+
     private fun addLeafs() {
-        if (game.isOver()) {
-            updateSizes { subtreeLeafsCount++ }
-            if (game.winner == game.PCFigure) updateSizes { winCountAtSubtree++ }
+        if (game.isOver() || depth>6) {
+            if (game.winner == game.gamerFigure) updateSizes { gamerWinCount++ }
+            if (game.winner == game.PCFigure) updateSizes { PCwinCount++ }
         } else {
             val moves = getPossibleMoves()
             for (move in moves) {
                 val newGame = game.copy()
                 newGame.makeMove(move.row, move.column)
-                val newChild = Node(newGame, this, move)
+                val newChild = Node(newGame, this, move, depth+1)
                 children.add(newChild)
             }
         }
