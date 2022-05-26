@@ -6,7 +6,7 @@ import java.util.concurrent.ForkJoinPool
 class GraphicCreator {
     fun createMapForGraphic(threadsCount: Int): MutableMap<String, Any> {
         val xs = List(SIZE) { it * STEP }
-        val sorter = QSortWithThreads<Int>(ForkJoinPool(threadsCount))
+        val sorter = QSortWithThreads(ForkJoinPool(threadsCount))
         val benchmark = Benchmark()
         val arrayGenerator = ArrayGenerator()
         val ys = xs.map {

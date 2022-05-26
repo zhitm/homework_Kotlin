@@ -1,12 +1,11 @@
 package homeworks.hw4.task1.benchmark
-@Suppress("ArrayPrimitive")
 class ArrayGenerator {
-    fun getRandomArray(size: Int): Array<Int> {
+    fun getRandomArray(size: Int): IntArray {
         val list = MutableList(size) { it }.shuffled()
-        return Array(size) { list[it] }
+        return Array(size) { list[it] }.toIntArray()
     }
 
-    inline fun <reified T> arrayCopy(array: Array<T>): Array<T> {
-        return Array(array.size) { array[it] }
+    fun arrayCopy(array: IntArray): IntArray {
+        return Array(array.size) { array[it] }.toIntArray()
     }
 }
