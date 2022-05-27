@@ -2,7 +2,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.compose.compose
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.6.10"
     id("org.openjfx.javafxplugin") version "0.0.8"
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
     id("org.jetbrains.compose") version "1.1.0"
