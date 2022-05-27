@@ -35,7 +35,7 @@ class GraphicCreator {
     }
 
     companion object PARAMS {
-        const val STEP = 100
+        const val STEP = 10000
         const val SIZE = 30
         const val REPEATS = 8
     }

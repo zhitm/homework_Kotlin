@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm") version "1.6.21"
     id("org.openjfx.javafxplugin") version "0.0.8"
 
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
@@ -29,9 +29,6 @@ fun getJavaFXPlatform(): String {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
-    testImplementation(platform("org.junit:junit-bom:5.8.2"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation("org.openjfx:javafx-base:$jfxVersion:${getJavaFXPlatform()}")
     implementation("org.openjfx:javafx-swing:$jfxVersion:${getJavaFXPlatform()}")
@@ -43,6 +40,9 @@ dependencies {
     implementation("org.slf4j:slf4j-simple:1.7.36")
 
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
+    testImplementation(platform("org.junit:junit-bom:5.8.2"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(kotlin("test"))
 }
 
 tasks.test {
@@ -53,7 +53,7 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
 
 

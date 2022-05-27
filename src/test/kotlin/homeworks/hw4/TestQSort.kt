@@ -4,11 +4,11 @@ import homeworks.hw4.task1.benchmark.ArrayGenerator
 import homeworks.hw4.task1.isSorted
 import homeworks.hw4.task1.qsort.QSort
 import homeworks.hw4.task1.qsort.QSortWithThreads
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.ForkJoinPool
-import kotlin.test.assertEquals
 
 class TestQSort {
     private val executor: ForkJoinPool = ForkJoinPool.commonPool()

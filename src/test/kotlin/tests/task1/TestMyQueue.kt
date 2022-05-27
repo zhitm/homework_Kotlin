@@ -1,9 +1,9 @@
 package tests.task1
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import tests.test1.task1.MyQueue
 import tests.test1.task1.QueueIntComparator
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class TestMyQueue {
     private val cmp = QueueIntComparator

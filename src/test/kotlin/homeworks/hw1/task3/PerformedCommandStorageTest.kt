@@ -3,11 +3,11 @@ package homeworks.hw1.task3
 import homeworks.hw1.task3.actions.ChangePosition
 import homeworks.hw1.task3.actions.Push
 import homeworks.hw1.task3.actions.PushBack
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class PerformedCommandStorageTest {
     @ParameterizedTest
