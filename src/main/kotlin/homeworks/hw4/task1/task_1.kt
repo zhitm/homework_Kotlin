@@ -10,14 +10,14 @@ fun main() {
         println("it's not a number")
     } else {
         val executor = ForkJoinPool(threadsNumber)
-        val mySorter = QSortWithThreads<Int>(executor)
+        val mySorter = QSortWithThreads(executor)
         println("Input the length of the array")
         val length = readLine()?.toIntOrNull()
         if (length == null) {
             println("it's not a number")
             return
         }
-        val array = Array(length) { it }
+        val array = IntArray(length) { it }
         for (index in 0 until length) {
             println("Input the next element")
             val element = readLine()?.toIntOrNull()

@@ -1,7 +1,5 @@
-
 package homeworks.hw4.task1.benchmark
 
-import homeworks.hw4.task1.benchmark.graphicCreators.ThreadsGraphicCreator
 import jetbrains.letsPlot.export.ggsave
 import jetbrains.letsPlot.geom.geomSmooth
 import jetbrains.letsPlot.ggsize
@@ -9,9 +7,10 @@ import jetbrains.letsPlot.letsPlot
 
 @Suppress("MagicNumber")
 fun main() {
-    val graphicCreator = ThreadsGraphicCreator()
+
+    val graphicCreator = GraphicCreator()
     val data = mutableMapOf<String, Any>()
-    val maxThreadsCount = 2
+    val maxThreadsCount = 5
     for (i in 1..maxThreadsCount) {
         data += graphicCreator.createMapForGraphic(i)
     }

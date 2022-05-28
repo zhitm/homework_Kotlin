@@ -3,17 +3,17 @@ package homeworks.hw4.task1
 import homeworks.hw4.task1.qsort.Partition
 import java.util.*
 
-fun <T> Array<T>.swap(index1: Int, index2: Int) {
+fun IntArray.swap(index1: Int, index2: Int) {
     val tmp = this[index1]
     this[index1] = this[index2]
     this[index2] = tmp
 }
 
-fun <T : Comparable<T>> Array<T>.isSorted(): Boolean {
+fun IntArray.isSorted(): Boolean {
     return (0 until this.lastIndex).all { this[it] <= this[it + 1] }
 }
 @Suppress("LoopWithTooManyJumpStatements")
-fun <T : Comparable<T>> partition(arr: Array<T>, start: Int, end: Int): Partition {
+fun partition(arr: IntArray, start: Int, end: Int): Partition {
     var i = start
     var j = end
     val pivot = (Random().nextInt(j - i) + i)
