@@ -46,7 +46,7 @@ class GraphicCreator {
         )
     }
 
-    fun getCoroutinePlot() : Plot {
+    fun getCoroutinePlot(): Plot {
         val graphicCreator = GraphicCreator()
         return letsPlot(graphicCreator.getCoroutinesGraphic()) + geomSmooth(
             method = "loess",

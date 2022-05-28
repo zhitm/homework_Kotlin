@@ -42,9 +42,9 @@ class TestQSort {
 
         @JvmStatic
         fun dataForSorts() = listOf(
-            Arguments.of(arrayOf(1)),
-            Arguments.of(arrayOf(1, 2)),
-            Arguments.of(arrayOf(1, 5, 2, 4, 3)),
+            Arguments.of(intArrayOf(1)),
+            Arguments.of(intArrayOf(1, 2)),
+            Arguments.of(intArrayOf(1, 5, 2, 4, 3)),
             Arguments.of(arrayGenerator.getRandomArray(1000)),
             Arguments.of(arrayGenerator.getRandomArray(10000)),
             Arguments.of(arrayGenerator.getRandomArray(100000)),
