@@ -3,6 +3,7 @@ package homeworks.hw6.tictactoe
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import homeworks.hw6.tictactoe.enums.Complexity
 import homeworks.hw6.tictactoe.enums.FigureType
 import homeworks.hw6.tictactoe.enums.GameState
 import homeworks.hw6.tictactoe.enums.GameType
@@ -21,7 +22,8 @@ class ViewModel {
             FigureType.CROSS,
             GameState.AWAITING_START,
             gameType = GameType.AGAINST_YOURSELF,
-            screen = Screen.StartScreen
+            screen = Screen.StartScreen,
+            complexity = Complexity.NORMAL
         )
 
     data class State(
@@ -31,12 +33,9 @@ class ViewModel {
         val nextPlayer: FigureType,
         val gameState: GameState,
         val gameType: GameType,
+        val complexity: Complexity,
         val screen: Screen
     )
-
-    fun updateState(newState: State) {
-        state = newState
-    }
 
     fun updateScreen(screen: Screen) = updateState { copy(screen = screen) }
 
@@ -54,7 +53,29 @@ class ViewModel {
         updateState { copy(gameType = gameType) }
     }
 
+    fun onComplexitySelect(complexity: Complexity) {
+        println(complexity)
+        updateState { copy(complexity = complexity) }
+    }
+
     fun onCellClick(row: Int, column: Int) {
-        updateState(makeMove(row, column))
+        makeMove(row, column)
+        getInfoFromGame()
+    }
+
+    fun onStart() {
+        startGame(state.complexity, state.gameType, state.pcFigure)
+        getInfoFromGame()
+    }
+
+    private fun getInfoFromGame() = updateState {
+        copy(
+            board = game.board,
+            moveCount = game.moveCount,
+            pcFigure = game.pcFigureType,
+            nextPlayer = game.nextPlayer,
+            gameState = game.state,
+            screen = Screen.GameScreen
+        )
     }
 }

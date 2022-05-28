@@ -1,20 +1,14 @@
 package homeworks.hw6.tictactoe.pcGamer
 
 import homeworks.hw6.tictactoe.enums.FigureType
-import homeworks.hw6.tictactoe.enums.GameType
 import homeworks.hw6.tictactoe.game.Game
 
-class PCgamer(private val figureType: FigureType) {
-    private val gameCopy = Game(GameType.AGAINST_PC, figureType)
-
-    init {
-        gameCopy.startGame(GameType.AGAINST_YOURSELF, figureType)
-    }
+class Bot(private val figureType: FigureType) : DumbBot(figureType) {
 
     private val oppositionFigure
         get() = if (figureType == FigureType.CROSS) FigureType.CIRCLE else FigureType.CROSS
 
-    fun updateGamerAndGetMove(lastMove: Move?): Move? {
+    override fun updateBotAndGetMove(lastMove: Move?): Move? {
         lastMove?.let { gameCopy.tryToMove(it.row, it.column) }
         val bestMove = getBestMove()
         bestMove?.let { gameCopy.tryToMove(bestMove.row, bestMove.column) }
@@ -84,18 +78,6 @@ class PCgamer(private val figureType: FigureType) {
         val newGame = game.copy()
         newGame.tryToMove(move.row, move.column)
         return newGame
-    }
-
-    private fun getPossibleMoves(game: Game): MutableList<Move> {
-        val moves = mutableListOf<Move>()
-        for (row in 0..2) {
-            for (column in 0..2) {
-                if (game.board.field[row][column] == FigureType.EMPTY) {
-                    moves.add(Move(row, column, game.nextPlayer))
-                }
-            }
-        }
-        return moves
     }
 
     companion object {

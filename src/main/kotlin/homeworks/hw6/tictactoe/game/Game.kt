@@ -12,7 +12,6 @@ class Game(var gameType: GameType, var pcFigureType: FigureType) {
 
     private var gamerFigure = if (pcFigureType == FigureType.CIRCLE) FigureType.CROSS else FigureType.CIRCLE
 
-    var isAwaitingPC = pcFigureType != FigureType.CIRCLE
     var nextPlayer = FigureType.CROSS
         private set
 
@@ -54,7 +53,7 @@ class Game(var gameType: GameType, var pcFigureType: FigureType) {
     }
 
     private fun pcMove(lastMove: Move?) {
-        val move = pcGamer.updateGamerAndGetMove(lastMove)
+        val move = pcGamer.updateBotAndGetMove(lastMove)
         move?.let { board.makeMove(move.row, move.column, move.gamer) }
         moveCount++
         changePlayer()
@@ -141,7 +140,6 @@ class Game(var gameType: GameType, var pcFigureType: FigureType) {
         gameCopy.board = board.copy()
         gameCopy.state = state
         gameCopy.nextPlayer = nextPlayer
-        gameCopy.isAwaitingPC = isAwaitingPC
         return gameCopy
     }
 
