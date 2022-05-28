@@ -10,9 +10,11 @@ plugins {
 group = "me.maria"
 version = "1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
 
+repositories {
+    google()
+    mavenCentral()
+    maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
 dependencies {
@@ -20,6 +22,7 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.8.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(compose.desktop.currentOs)
+    implementation("org.jsoup:jsoup:1.13.1")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
 }
 
@@ -31,8 +34,6 @@ tasks.test {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "11"
 }
-
-
 
