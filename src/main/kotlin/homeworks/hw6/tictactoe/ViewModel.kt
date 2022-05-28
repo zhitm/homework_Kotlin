@@ -54,7 +54,6 @@ class ViewModel {
     }
 
     fun onComplexitySelect(complexity: Complexity) {
-        println(complexity)
         updateState { copy(complexity = complexity) }
     }
 
