@@ -8,7 +8,7 @@ import androidx.compose.ui.window.rememberWindowState
 
 fun main() = application {
     Window(
-        onCloseRequest = ::exitApplication, title = "RETEST2",
+        onCloseRequest = ::exitApplication, title = "GAME",
         state = rememberWindowState(width = 800.dp, height = 800.dp)
     ) {
         val viewModel = remember { ViewModel() }

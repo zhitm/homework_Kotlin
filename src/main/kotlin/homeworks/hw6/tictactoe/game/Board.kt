@@ -1,14 +1,27 @@
-package homeworks.hw6.tictactoe
+package homeworks.hw6.tictactoe.game
 
 import homeworks.hw6.tictactoe.enums.FigureType
 
 class Board {
-    val field = Array(3) { Array(3) { FigureType.EMPTY } }
+    var field = Array(3) { Array(3) { FigureType.EMPTY } }
     fun makeMove(row: Int, column: Int, figure: FigureType): Boolean {
         require(row in 0..2 && column in 0..2) { "Попытка поставить фигуру вне поля" }
         require(figure != FigureType.EMPTY) { "Нельзя поставить пустую клетку" }
         if (field[row][column] != FigureType.EMPTY) return false
         field[row][column] = figure
         return true
+    }
+
+    fun printBoard() {
+        field.forEach { row -> row.forEach { print("$it ") };println() }
+    }
+
+    fun copy() : Board {
+        val boardCopy = Board()
+        boardCopy.field[0] = field[0].clone()
+        boardCopy.field[1] = field[1].clone()
+        boardCopy.field[2] = field[2].clone()
+
+        return boardCopy
     }
 }
