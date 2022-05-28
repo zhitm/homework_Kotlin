@@ -44,9 +44,15 @@ class ViewModel {
         state = state.update()
     }
 
-    fun onSideSelect(figureType: FigureType) = updateState { copy(pcFigure = figureType) }
+    fun onSideSelect(figureType: FigureType) {
+        game.pcFigureType = figureType
+        updateState { copy(pcFigure = figureType) }
+    }
 
-    fun onGameTypeSelect(gameType: GameType) = updateState { copy(gameType = gameType) }
+    fun onGameTypeSelect(gameType: GameType) {
+        game.gameType = gameType
+        updateState { copy(gameType = gameType) }
+    }
 
     fun onCellClick(row: Int, column: Int) {
         updateState(makeMove(row, column))

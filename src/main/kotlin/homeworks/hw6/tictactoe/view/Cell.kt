@@ -2,7 +2,9 @@ package homeworks.hw6.tictactoe.view
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -16,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import homeworks.hw6.tictactoe.enums.FigureType
 import java.io.File
 
-
 @Composable
+@Suppress("FunctionNaming")
 fun Cell(row: Int, column: Int, figure: FigureType, onCellClick: (Int, Int) -> Unit) {
     Box(
         Modifier.clickable(onClick = { onCellClick(row, column) }
@@ -25,9 +27,11 @@ fun Cell(row: Int, column: Int, figure: FigureType, onCellClick: (Int, Int) -> U
             .clip(shape = RoundedCornerShape(10.dp))
 
     ) {
-        val path =
-            if (figure == FigureType.CROSS) "src/main/resources/images/cross.png"
-            else if (figure == FigureType.CIRCLE) "src/main/resources/images/circle.png" else "src/main/resources/images/empty.jpg"
+        val path = when (figure) {
+            FigureType.CROSS -> "src/main/resources/images/cross.png"
+            FigureType.CIRCLE -> "src/main/resources/images/circle.png"
+            else -> "src/main/resources/images/empty.jpg"
+        }
 
         val file = File(path)
         val imageBitmap: ImageBitmap = remember(file) {
@@ -41,5 +45,3 @@ fun Cell(row: Int, column: Int, figure: FigureType, onCellClick: (Int, Int) -> U
         )
     }
 }
-
-

@@ -1,4 +1,4 @@
-package homeworks.hw6.tictactoe.PCgamer
+package homeworks.hw6.tictactoe.view
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+@Suppress("FunctionNaming")
 @Composable
 fun <T> GroupRadioButton(mItems: List<T>, startValue: T, onSelect: (T) -> Unit) {
     val mRememberObserver = remember { mutableStateOf(startValue) }
@@ -31,4 +32,3 @@ fun <T> GroupRadioButton(mItems: List<T>, startValue: T, onSelect: (T) -> Unit) 
     }
     onSelect(mRememberObserver.value)
 }
-

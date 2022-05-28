@@ -1,4 +1,4 @@
-package homeworks.hw6.tictactoe.PCgamer
+package homeworks.hw6.tictactoe.pcGamer
 
 import homeworks.hw6.tictactoe.enums.FigureType
 

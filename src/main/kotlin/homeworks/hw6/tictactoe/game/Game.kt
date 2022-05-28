@@ -1,15 +1,18 @@
 package homeworks.hw6.tictactoe.game
 
-import homeworks.hw6.tictactoe.PCgamer.Move
 import homeworks.hw6.tictactoe.enums.FigureType
 import homeworks.hw6.tictactoe.enums.GameState
 import homeworks.hw6.tictactoe.enums.GameType
 import homeworks.hw6.tictactoe.pcGamer
+import homeworks.hw6.tictactoe.pcGamer.Move
 
-class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE) {
+@Suppress("TooManyFunctions")
+class Game(var gameType: GameType, var pcFigureType: FigureType) {
     var moveCount = 0
-    val gamerFigure = if (PCFigure == FigureType.CIRCLE) FigureType.CROSS else FigureType.CIRCLE
-    var isAwaitingPC = PCFigure != FigureType.CIRCLE
+
+    private var gamerFigure = if (pcFigureType == FigureType.CIRCLE) FigureType.CROSS else FigureType.CIRCLE
+
+    var isAwaitingPC = pcFigureType != FigureType.CIRCLE
     var nextPlayer = FigureType.CROSS
         private set
 
@@ -23,14 +26,16 @@ class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE)
     fun isActive(): Boolean = state == GameState.ACTIVE
     fun isAwaitingStart(): Boolean = state == GameState.AWAITING_START
 
-    fun startGame(gameType: GameType) {
-//        this.PCFigure = PCFigure
-//        добавить выбор крестиков для пк
+    fun startGame(gameType: GameType, pcFigure: FigureType) {
+        this.pcFigureType = pcFigure
         this.gameType = gameType
-//        pcGamer = PCgamer()
+        gamerFigure = if (pcFigureType == FigureType.CIRCLE) FigureType.CROSS else FigureType.CIRCLE
         state = GameState.ACTIVE
         board = Board()
         nextPlayer = FigureType.CROSS
+        if (gameType == GameType.AGAINST_PC && pcFigureType == FigureType.CROSS) {
+            pcMove(null)
+        }
     }
 
     private fun checkGameState() {
@@ -48,19 +53,18 @@ class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE)
         }
     }
 
-    private fun pcMove(lastMove: Move) {
+    private fun pcMove(lastMove: Move?) {
         val move = pcGamer.updateGamerAndGetMove(lastMove)
-        move?.let {board.makeMove(move.row, move.column, move.gamer)}
+        move?.let { board.makeMove(move.row, move.column, move.gamer) }
         moveCount++
         changePlayer()
         checkGameState()
     }
 
-
-    fun fuck(row: Int, column: Int){
+    fun sendMoveToPC(row: Int, column: Int) {
         if (gamerFigure == nextPlayer) {
             tryToMove(row, column)
-            if (PCFigure == nextPlayer) {
+            if (pcFigureType == nextPlayer) {
                 pcMove(Move(row, column, gamerFigure))
             }
         }
@@ -70,7 +74,7 @@ class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE)
         if (isActive()) {
             when (gameType) {
                 GameType.AGAINST_YOURSELF -> tryToMove(row, column)
-                GameType.AGAINST_PC -> fuck(row,column)
+                GameType.AGAINST_PC -> sendMoveToPC(row, column)
             }
         }
     }
@@ -81,10 +85,10 @@ class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE)
 
     private fun checkWinInRow() {
         for (row in 0..2) {
-            if (board.field[row].contentEquals(Array(3) { FigureType.CROSS })) {
+            if (board.field[row].contentEquals(Array(SIZE) { FigureType.CROSS })) {
                 winner = FigureType.CROSS
                 overGame()
-            } else if (board.field[row].contentEquals(Array(3) { FigureType.CIRCLE })) {
+            } else if (board.field[row].contentEquals(Array(SIZE) { FigureType.CIRCLE })) {
                 winner = FigureType.CIRCLE
                 overGame()
             }
@@ -133,11 +137,15 @@ class Game(var gameType: GameType, var PCFigure: FigureType = FigureType.CIRCLE)
     }
 
     fun copy(): Game {
-        val gameCopy = Game(gameType, PCFigure)
+        val gameCopy = Game(gameType, pcFigureType)
         gameCopy.board = board.copy()
         gameCopy.state = state
         gameCopy.nextPlayer = nextPlayer
         gameCopy.isAwaitingPC = isAwaitingPC
         return gameCopy
+    }
+
+    companion object {
+        const val SIZE = 3
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import homeworks.hw6.tictactoe.ViewModel
 
+@Suppress("FunctionNaming")
 @Composable
 fun Board(rowCount: Int, columnCount: Int, viewModel: ViewModel) {
     Column {
