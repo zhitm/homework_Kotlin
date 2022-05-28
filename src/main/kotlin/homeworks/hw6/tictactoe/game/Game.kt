@@ -7,7 +7,7 @@ import homeworks.hw6.tictactoe.pcGamer
 import homeworks.hw6.tictactoe.pcGamer.Move
 
 @Suppress("TooManyFunctions")
-class Game(var gameType: GameType, var pcFigureType: FigureType) {
+class Game(var gameType: GameType, var pcFigureType: FigureType = FigureType.EMPTY) {
     var moveCount = 0
 
     private var gamerFigure = if (pcFigureType == FigureType.CIRCLE) FigureType.CROSS else FigureType.CIRCLE
