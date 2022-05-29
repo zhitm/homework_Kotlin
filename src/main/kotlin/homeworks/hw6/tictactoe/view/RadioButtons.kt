@@ -15,7 +15,8 @@ import androidx.compose.ui.unit.dp
 
 @Suppress("FunctionNaming")
 @Composable
-fun <T> GroupRadioButton(mItems: List<T>, startValue: T, onSelect: (T) -> Unit) {
+fun <T> GroupRadioButton(mapOfItems: Map<T, String>, startValue: T, onSelect: (T) -> Unit) {
+    val mItems = mapOfItems.keys
     val mRememberObserver = remember { mutableStateOf(startValue) }
     Column {
         mItems.forEach { mItem ->
@@ -27,7 +28,7 @@ fun <T> GroupRadioButton(mItems: List<T>, startValue: T, onSelect: (T) -> Unit) 
                     colors = RadioButtonDefaults.colors(selectedColor = Color.Magenta)
                 )
             }
-            Text(text = mItem.toString(), modifier = Modifier.padding(start = 8.dp))
+            mapOfItems[mItem]?.let { Text(text = it, modifier = Modifier.padding(start = 8.dp)) }
         }
     }
     onSelect(mRememberObserver.value)

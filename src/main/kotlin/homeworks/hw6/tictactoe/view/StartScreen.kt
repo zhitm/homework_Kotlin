@@ -15,16 +15,20 @@ fun StartScreen(viewModel: ViewModel) {
     Column {
         Text("Выберите тип игры:")
         GroupRadioButton(
-            listOf(GameType.AGAINST_PC, GameType.AGAINST_YOURSELF),
+            mapOf(GameType.AGAINST_PC to "Против компьютера", GameType.AGAINST_YOURSELF to "Сам с собой"),
             GameType.AGAINST_YOURSELF,
             viewModel::onGameTypeSelect
         )
         if (viewModel.state.gameType == GameType.AGAINST_PC) {
             Text("За кого будет играть компьютер в следующей игре?")
-            GroupRadioButton(listOf(FigureType.CROSS, FigureType.CIRCLE), FigureType.CIRCLE, viewModel::onSideSelect)
+            GroupRadioButton(
+                mapOf(FigureType.CROSS to "Крестики", FigureType.CIRCLE to "Нолики"),
+                FigureType.CIRCLE,
+                viewModel::onSideSelect
+            )
             Text("Выберите уровень сложности:")
             GroupRadioButton(
-                listOf(Complexity.EASY, Complexity.NORMAL),
+                mapOf(Complexity.EASY to "Простой", Complexity.NORMAL to "Нормальный"),
                 Complexity.NORMAL,
                 viewModel::onComplexitySelect
             )
