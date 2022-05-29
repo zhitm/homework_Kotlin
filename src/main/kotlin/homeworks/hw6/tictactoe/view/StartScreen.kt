@@ -30,12 +30,6 @@ fun StartScreen(viewModel: ViewModel) {
             )
         }
         Button(onClick = {
-//            viewModel.updateState(
-//                startGame(
-//                    viewModel.state.gameType,
-//                    viewModel.state.pcFigure
-//                )
-//            )
             viewModel.onStart()
         }) { Text("Начать игру") }
     }
