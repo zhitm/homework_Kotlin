@@ -23,5 +23,4 @@ fun GameScreen(viewModel: ViewModel) {
     if (game.isOver()) {
         GameEndDialog(viewModel)
     }
-
 }
