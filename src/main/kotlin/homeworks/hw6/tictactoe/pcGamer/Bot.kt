@@ -23,7 +23,6 @@ class Bot(private val figureType: FigureType) : DumbBot(figureType) {
     private fun evalMove(move: Move): Int {
         val state = getCopyAfterMove(gameCopy, move)
         var reward = 0
-        println(state.winner)
         if (state.winner == figureType) return PC_WIN
         val oppositionMoves = getPossibleMoves(state)
         for (possibleMove in oppositionMoves) {
@@ -35,7 +34,6 @@ class Bot(private val figureType: FigureType) : DumbBot(figureType) {
             reward += CENTER
         }
         reward += goodLinesCount(state) * CAN_WIN_NEXT_MOVE
-        println(reward)
         return reward
     }
 
