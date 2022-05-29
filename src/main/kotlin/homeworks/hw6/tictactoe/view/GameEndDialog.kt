@@ -16,7 +16,6 @@ fun GameEndDialog(viewModel: ViewModel) {
     AlertDialog(
         onDismissRequest = {},
         title = { Text("Игра окончена.") },
-        text = { Text("В каком режиме дальше?") },
         confirmButton = {
             Button(onClick = { viewModel.updateScreen(Screen.StartScreen) }) { Text("Начать новую игру") }
         },
