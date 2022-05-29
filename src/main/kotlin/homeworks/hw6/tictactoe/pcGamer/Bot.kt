@@ -23,15 +23,19 @@ class Bot(private val figureType: FigureType) : DumbBot(figureType) {
     private fun evalMove(move: Move): Int {
         val state = getCopyAfterMove(gameCopy, move)
         var reward = 0
+        println(state.winner)
         if (state.winner == figureType) return PC_WIN
-        val oppositionMoves = getPossibleMoves(gameCopy)
+        val oppositionMoves = getPossibleMoves(state)
         for (possibleMove in oppositionMoves) {
-            if (getCopyAfterMove(state, possibleMove).winner == oppositionFigure) return PC_LOOSE
+            if (getCopyAfterMove(state, possibleMove).winner == oppositionFigure) {
+                reward += PC_LOOSE
+            }
         }
         if (move.row == 1 && move.column == 1) {
             reward += CENTER
         }
         reward += goodLinesCount(state) * CAN_WIN_NEXT_MOVE
+        println(reward)
         return reward
     }
 
