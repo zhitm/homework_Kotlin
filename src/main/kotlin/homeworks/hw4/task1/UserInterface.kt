@@ -6,6 +6,7 @@ import java.awt.Dimension
 import java.awt.GridLayout
 import javax.swing.*
 import javax.swing.WindowConstants.EXIT_ON_CLOSE
+import kotlin.math.pow
 
 // по образу и подобию официального примера: https://github.com/alshan/lets-plot-mini-apps/tree/main/jvm-swing-javafx-app
 
@@ -76,15 +77,15 @@ class UserInterface {
 
     private fun getMapOfGraphics(): Map<String, Plot> {
         val graphicCreator = GraphicCreator()
-        val names = (1..MAX_THREADS_COUNT).map { "$it threads" }
-        val plots = (1..MAX_THREADS_COUNT).map {
-            graphicCreator.getPlot(it)
+        val names = (0..MAX_POW).map { "${2.0.pow(it).toInt()} threads" }
+        val plots = (0..MAX_POW).map {
+            graphicCreator.getPlot(2.0.pow(it).toInt())
         }
         return names.associateWith { plots[names.indexOf(it)] }
     }
 
     companion object {
-        const val MAX_THREADS_COUNT = 10
+        const val MAX_POW = 10
         const val WIDTH = 1920
         const val HEIGHT = 1800
     }

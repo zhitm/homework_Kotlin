@@ -11,13 +11,31 @@ import org.junit.jupiter.params.provider.MethodSource
 import java.util.concurrent.ForkJoinPool
 
 class TestQSort {
-    private val executor: ForkJoinPool = ForkJoinPool.commonPool()
-    private val parallelSorter = QSortWithThreads(executor)
     private val usualSorter = QSort()
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test parallel sort`(array: IntArray) {
+    fun `test parallel sort on 1 thread`(array: IntArray) {
+        val executor = ForkJoinPool(1)
+        val parallelSorter = QSortWithThreads(executor)
+        parallelSorter.sort(array)
+        assertEquals(true, array.isSorted())
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataForSorts")
+    fun `test parallel sort on 2 threads`(array: IntArray) {
+        val executor = ForkJoinPool(2)
+        val parallelSorter = QSortWithThreads(executor)
+        parallelSorter.sort(array)
+        assertEquals(true, array.isSorted())
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataForSorts")
+    fun `test parallel sort on 239 threads`(array: IntArray) {
+        val executor = ForkJoinPool(239)
+        val parallelSorter = QSortWithThreads(executor)
         parallelSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
