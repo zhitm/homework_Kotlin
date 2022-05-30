@@ -19,7 +19,6 @@ class Bot(private val figureType: FigureType) : DumbBot(figureType) {
         return getPossibleMoves(gameCopy).maxByOrNull { evalMove(it) }
     }
 
-    @Suppress("ReturnCount")
     private fun evalMove(move: Move): Int {
         val state = getCopyAfterMove(gameCopy, move)
         var reward = 0
