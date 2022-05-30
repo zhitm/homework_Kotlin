@@ -16,7 +16,7 @@ fun IntArray.isSorted(): Boolean {
 fun partition(arr: IntArray, start: Int, end: Int): Partition {
     var i = start
     var j = end
-    val pivot = (Random().nextInt(j - i) + i)
+    val pivot = start
     arr.swap(j, pivot)
     j--
     while (i <= j) {
