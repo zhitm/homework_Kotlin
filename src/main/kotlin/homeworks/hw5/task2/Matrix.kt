@@ -55,16 +55,7 @@ class Matrix(private val table: Array<IntArray>) {
         }
     }
 
-    private fun rowToString(row: IntArray): String {
-        var str = " "
-        row.forEach { str += "$it " }
-        str += "\n"
-        return str
-    }
+    private fun rowToString(row: IntArray): String = row.joinToString(" ")
 
-    override fun toString(): String {
-        var str = " "
-        table.forEach { str += rowToString(it) }
-        return str
-    }
+    override fun toString(): String = table.joinToString("\n") { rowToString(it) }
 }
