@@ -22,6 +22,7 @@ open class DumbBot(figureType: FigureType) {
 
     protected fun getPossibleMoves(game: Game): MutableList<Move> {
         val moves = mutableListOf<Move>()
+        if (game.winner != FigureType.EMPTY) return moves
         for (row in 0..2) {
             for (column in 0..2) {
                 if (game.board.field[row][column] == FigureType.EMPTY) {
