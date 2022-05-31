@@ -4,29 +4,35 @@ import homeworks.hw4.task1.benchmark.ArrayGenerator
 import homeworks.hw4.task1.isSorted
 import homeworks.hw4.task1.qsort.QSort
 import homeworks.hw4.task1.qsort.QSortWithCoroutines
-import homeworks.hw4.task1.qsort.QSortWithThreads
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.util.concurrent.ForkJoinPool
+
 class TestQSort {
-    private val executor: ForkJoinPool = ForkJoinPool.commonPool()
-    private val parallelSorter = QSortWithThreads(executor)
-    private val coroutinesSorter = QSortWithCoroutines()
     private val usualSorter = QSort()
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test parallel sort`(array: IntArray) {
+    fun `test 1 coroutines sort`(array: IntArray) {
+        val coroutinesSorter = QSortWithCoroutines(1)
         coroutinesSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test coroutines sort`(array: IntArray) {
-        parallelSorter.sort(array)
+    fun `test 2 coroutines sort`(array: IntArray) {
+        val coroutinesSorter = QSortWithCoroutines(2)
+        coroutinesSorter.sort(array)
+        assertEquals(true, array.isSorted())
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataForSorts")
+    fun `test 239 coroutines sort`(array: IntArray) {
+        val coroutinesSorter = QSortWithCoroutines(239)
+        coroutinesSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
 

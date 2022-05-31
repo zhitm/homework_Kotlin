@@ -27,10 +27,10 @@ class GraphicCreator {
         )
     }
 
-    fun getCoroutinesGraphic(): MutableMap<String, Any> {
+    private fun getCoroutinesGraphic(coroutinesCount: Int): MutableMap<String, Any> {
         println("Coroutines graphic is started computing")
         val xs = List(SIZE) { it * STEP }
-        val sorter = QSortWithCoroutines()
+        val sorter = QSortWithCoroutines(coroutinesCount)
         val benchmark = Benchmark()
         val arrayGenerator = ArrayGenerator()
         val ys = xs.map {
@@ -46,9 +46,9 @@ class GraphicCreator {
         )
     }
 
-    fun getCoroutinePlot(): Plot {
+    fun getCoroutinePlot(coroutinesCount: Int): Plot {
         val graphicCreator = GraphicCreator()
-        return letsPlot(graphicCreator.getCoroutinesGraphic()) + geomSmooth(
+        return letsPlot(graphicCreator.getCoroutinesGraphic(coroutinesCount)) + geomSmooth(
             method = "loess",
             se = false
         ) { x = "x"; y = "y" }
