@@ -15,33 +15,15 @@ class TestQSort {
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test parallel sort on 1 thread`(array: IntArray) {
-        val executor = ForkJoinPool(1)
+    fun `test parallel sort`(array: IntArray, threadsCount: Int) {
+        val executor = ForkJoinPool(threadsCount)
         val parallelSorter = QSortWithThreads(executor)
         parallelSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
 
     @ParameterizedTest
-    @MethodSource("dataForSorts")
-    fun `test parallel sort on 2 threads`(array: IntArray) {
-        val executor = ForkJoinPool(2)
-        val parallelSorter = QSortWithThreads(executor)
-        parallelSorter.sort(array)
-        assertEquals(true, array.isSorted())
-    }
-
-    @ParameterizedTest
-    @MethodSource("dataForSorts")
-    fun `test parallel sort on 239 threads`(array: IntArray) {
-        val executor = ForkJoinPool(239)
-        val parallelSorter = QSortWithThreads(executor)
-        parallelSorter.sort(array)
-        assertEquals(true, array.isSorted())
-    }
-
-    @ParameterizedTest
-    @MethodSource("dataForSorts")
+    @MethodSource("dataForUsualSort")
     fun `test usual sort`(array: IntArray) {
         usualSorter.sort(array)
         assertEquals(true, array.isSorted())
@@ -52,6 +34,17 @@ class TestQSort {
 
         @JvmStatic
         fun dataForSorts() = listOf(
+            Arguments.of(intArrayOf(1), 1),
+            Arguments.of(intArrayOf(1, 2), 2),
+            Arguments.of(intArrayOf(1, 5, 2, 4, 3), 52),
+            Arguments.of(arrayGenerator.getRandomArray(1000), 23),
+            Arguments.of(arrayGenerator.getRandomArray(10000), 423),
+            Arguments.of(arrayGenerator.getRandomArray(100000), 4),
+            Arguments.of(arrayGenerator.getRandomArray(1000000), 30)
+        )
+
+        @JvmStatic
+        fun dataForUsualSort() = listOf(
             Arguments.of(intArrayOf(1)),
             Arguments.of(intArrayOf(1, 2)),
             Arguments.of(intArrayOf(1, 5, 2, 4, 3)),
