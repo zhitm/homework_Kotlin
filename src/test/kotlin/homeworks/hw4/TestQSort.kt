@@ -14,30 +14,14 @@ class TestQSort {
 
     @ParameterizedTest
     @MethodSource("dataForSorts")
-    fun `test 1 coroutines sort`(array: IntArray) {
-        val coroutinesSorter = QSortWithCoroutines(1)
+    fun `test coroutines sort`(array: IntArray, coroutinesCount: Int) {
+        val coroutinesSorter = QSortWithCoroutines(coroutinesCount)
         coroutinesSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
 
     @ParameterizedTest
-    @MethodSource("dataForSorts")
-    fun `test 2 coroutines sort`(array: IntArray) {
-        val coroutinesSorter = QSortWithCoroutines(2)
-        coroutinesSorter.sort(array)
-        assertEquals(true, array.isSorted())
-    }
-
-    @ParameterizedTest
-    @MethodSource("dataForSorts")
-    fun `test 239 coroutines sort`(array: IntArray) {
-        val coroutinesSorter = QSortWithCoroutines(239)
-        coroutinesSorter.sort(array)
-        assertEquals(true, array.isSorted())
-    }
-
-    @ParameterizedTest
-    @MethodSource("dataForSorts")
+    @MethodSource("dataForUsualSort")
     fun `test usual sort`(array: IntArray) {
         usualSorter.sort(array)
         assertEquals(true, array.isSorted())
@@ -48,6 +32,17 @@ class TestQSort {
 
         @JvmStatic
         fun dataForSorts() = listOf(
+            Arguments.of(intArrayOf(1), 1),
+            Arguments.of(intArrayOf(1, 2), 2),
+            Arguments.of(intArrayOf(1, 5, 2, 4, 3), 52),
+            Arguments.of(arrayGenerator.getRandomArray(1000), 23),
+            Arguments.of(arrayGenerator.getRandomArray(10000), 423),
+            Arguments.of(arrayGenerator.getRandomArray(100000), 4),
+            Arguments.of(arrayGenerator.getRandomArray(1000000), 30)
+        )
+
+        @JvmStatic
+        fun dataForUsualSort() = listOf(
             Arguments.of(intArrayOf(1)),
             Arguments.of(intArrayOf(1, 2)),
             Arguments.of(intArrayOf(1, 5, 2, 4, 3)),
