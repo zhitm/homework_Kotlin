@@ -1,7 +1,6 @@
 package homeworks.hw4.task1
 
 import homeworks.hw4.task1.qsort.Partition
-import java.util.*
 
 fun IntArray.swap(index1: Int, index2: Int) {
     val tmp = this[index1]
@@ -16,7 +15,7 @@ fun IntArray.isSorted(): Boolean {
 fun partition(arr: IntArray, start: Int, end: Int): Partition {
     var i = start
     var j = end
-    val pivot = (Random().nextInt(j - i) + i)
+    val pivot = start
     arr.swap(j, pivot)
     j--
     while (i <= j) {
