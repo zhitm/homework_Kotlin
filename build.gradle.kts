@@ -52,6 +52,9 @@ dependencies {
 
     implementation(compose.desktop.currentOs)
     implementation("org.jsoup:jsoup:1.13.1")
+    
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+
 }
 
 tasks.test {
