@@ -36,7 +36,7 @@ class TestQSort {
             Arguments.of(intArrayOf(1, 2), 2),
             Arguments.of(intArrayOf(1, 5, 2, 4, 3), 52),
             Arguments.of(arrayGenerator.getRandomArray(1000), 23),
-            Arguments.of(arrayGenerator.getRandomArray(10000), 423),
+            Arguments.of(arrayGenerator.getRandomArray(10000), 123),
             Arguments.of(arrayGenerator.getRandomArray(100000), 4),
             Arguments.of(arrayGenerator.getRandomArray(1000000), 30)
         )
