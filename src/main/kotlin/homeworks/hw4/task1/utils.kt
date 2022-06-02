@@ -1,7 +1,6 @@
 package homeworks.hw4.task1
 
 import homeworks.hw4.task1.qsort.Partition
-import java.util.*
 
 fun IntArray.swap(index1: Int, index2: Int) {
     val tmp = this[index1]
