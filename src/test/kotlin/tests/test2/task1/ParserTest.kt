@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import kotlin.test.assertNotNull
 
 class ParserTest {
     private val parser = Parser()
@@ -18,7 +17,7 @@ class ParserTest {
 
     @Test
     fun getUrls() {
-        assertNotNull(parser.getAllWikiUrls("https://en.wikipedia.org/wiki/War_(disambiguation)"))
+        parser.getAllWikiUrls("https://en.wikipedia.org/wiki/War_(disambiguation)")
     }
 
     companion object {
