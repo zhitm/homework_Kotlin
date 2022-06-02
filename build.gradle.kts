@@ -1,6 +1,6 @@
-
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.compose.compose
+
 plugins {
     kotlin("jvm") version "1.6.10"
     id("io.gitlab.arturbosch.detekt") version "1.19.0"
