@@ -8,14 +8,21 @@ class Parser {
         return@runBlocking Jsoup.connect(url).get()
     }
 
-    fun getAllWikiUrls(url: String): List<String>{
+    @Suppress("SwallowedException")
+    fun isUrlValid(url: String): Boolean {
+        try {
+            Jsoup.connect(url).get()
+        } catch (e: java.lang.IllegalArgumentException) {
+            System.err.println("Ссылка некорректна")
+            return false
+        }
+        return true
+    }
+
+    fun getAllWikiUrls(url: String): List<String> {
         val document = getHtml(url)
         val prefix = url.split("/wiki")[0]
         val links = document?.select("#bodyContent div:not(#mw-panel) a[href^=/wiki/]")
-        if (links != null) {
-            println(links.size)
-        }
-//        links?.forEach { println(it)}
-        return links?.map{ prefix+it.attr("href")} ?: emptyList()
+        return links?.map { prefix + it.attr("href") } ?: emptyList()
     }
 }
