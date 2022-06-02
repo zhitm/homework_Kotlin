@@ -87,8 +87,6 @@ class UserInterface {
         }
         plots += plotsCoroutines
         names += namesCoroutines
-        println(names.size)
-        println(plots.size)
         return names.associateWith { plots[names.indexOf(it)] }
     }
 

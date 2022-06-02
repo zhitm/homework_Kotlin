@@ -4,10 +4,12 @@ import homeworks.hw4.task1.benchmark.ArrayGenerator
 import homeworks.hw4.task1.isSorted
 import homeworks.hw4.task1.qsort.QSort
 import homeworks.hw4.task1.qsort.QSortWithCoroutines
+import homeworks.hw4.task1.qsort.QSortWithThreads
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import java.util.concurrent.ForkJoinPool
 
 class TestQSort {
     private val usualSorter = QSort()
@@ -17,6 +19,15 @@ class TestQSort {
     fun `test coroutines sort`(array: IntArray, coroutinesCount: Int) {
         val coroutinesSorter = QSortWithCoroutines(coroutinesCount)
         coroutinesSorter.sort(array)
+        assertEquals(true, array.isSorted())
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataForSorts")
+    fun `test parallel sort`(array: IntArray, threadsCount: Int) {
+        val executor = ForkJoinPool(threadsCount)
+        val parallelSorter = QSortWithThreads(executor)
+        parallelSorter.sort(array)
         assertEquals(true, array.isSorted())
     }
 
